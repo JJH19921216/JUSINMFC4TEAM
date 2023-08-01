@@ -235,6 +235,15 @@ BEGIN
     PUSHBUTTON      "저장하기",IDC_BUTTON1,7,152,112,41
 END
 
+IDD_CObject DIALOG 0, 0, 320, 200
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "대화 상자"
+FONT 9, "MS Shell Dlg"
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,209,179,50,14
+    PUSHBUTTON      "취소",IDCANCEL,263,179,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -308,6 +317,14 @@ BEGIN
     END
 
     IDD_MAPTOOL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 193
+    END
+
+    IDD_CObject, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 313

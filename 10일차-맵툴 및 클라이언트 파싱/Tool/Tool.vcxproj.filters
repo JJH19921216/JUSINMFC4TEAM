@@ -64,6 +64,12 @@
     <Filter Include="05. Etc\01. FileInfo">
       <UniqueIdentifier>{09843c86-a5ea-4ab2-a8fc-62bc2ad663b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. FormView\DIalog\02.ObjectTool">
+      <UniqueIdentifier>{4e45678b-9b96-4667-be09-5f9be8da071b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Etc\02.Object">
+      <UniqueIdentifier>{92516115-ef19-4a3b-8727-e8075d5f3e13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -123,6 +129,12 @@
     <ClInclude Include="FileInfo.h">
       <Filter>05. Etc\01. FileInfo</Filter>
     </ClInclude>
+    <ClInclude Include="CObject.h">
+      <Filter>06. FormView\DIalog\02.ObjectTool</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectInfo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -172,6 +184,12 @@
     </ClCompile>
     <ClCompile Include="FileInfo.cpp">
       <Filter>05. Etc\01. FileInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="CObject.cpp">
+      <Filter>06. FormView\DIalog\02.ObjectTool</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectInfo.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
