@@ -15,6 +15,7 @@ public:
 	virtual void Render_Scene() override;
 	virtual void Release_Scene() override;
 
+	void		 ScrollScene();
 
 
 };

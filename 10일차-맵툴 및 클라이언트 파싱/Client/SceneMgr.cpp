@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "SceneMgr.h"
 #include "Stage.h"
+#include "TimeMgr.h"
 
 IMPLEMENT_SINGLETON(CSceneMgr)
+
+float	g_Ratio = 1.f;
 
 CSceneMgr::CSceneMgr()
 	:m_pScene(nullptr)
@@ -58,6 +61,8 @@ void CSceneMgr::Update_SceneMgr()
 void CSceneMgr::Late_Update_SceneMgr()
 {
 	m_pScene->Late_Update_Scene(); 
+	
+	ZoomInOut();
 }
 
 void CSceneMgr::Render_SceneMgr()
@@ -69,3 +74,13 @@ void CSceneMgr::Release_SceneMgr()
 {
 	Safe_Delete<CScene*>(m_pScene); 
 }
+
+void CSceneMgr::ZoomInOut()
+{
+	if (GetAsyncKeyState(VK_UP) & 0x8000 )
+		g_Ratio += 1.f * CTimeMgr::Get_Instance()->Get_TimeDelta();
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000 && g_Ratio > 0.1f)
+		g_Ratio -= 1.f * CTimeMgr::Get_Instance()->Get_TimeDelta();
+}
+
+

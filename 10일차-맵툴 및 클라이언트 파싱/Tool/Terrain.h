@@ -36,6 +36,6 @@ private:
 public:
 	float				GetRatio() { return m_Ratio; }
 	void				UpRatio() { m_Ratio += 0.1f; }
-	void				DownRatio() { m_Ratio -= 0.1f; }
+	void				DownRatio() { if(m_Ratio > 0.1f) m_Ratio -= 0.1f; }
 };
 

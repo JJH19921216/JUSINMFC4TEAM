@@ -36,7 +36,7 @@ HRESULT CSingleTexture::Insert_Texture(const TCHAR * pFilePath, const TCHAR * pS
 	
 	D3DPOOL_SYSTEMMEM : 메인 메모리에 보관
 	D3DPOOL_SCRATCH : 시스템 메모리를 사용하지만 DX장치로부터 접근 불가*/
-
+	
 	if (FAILED(D3DXCreateTextureFromFileEx(CDevice::Get_Instance()->Get_Device(), 
 		pFilePath, 
 		m_pTexInfo->tImgInfo.Width, 

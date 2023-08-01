@@ -28,6 +28,8 @@ void CMyForm::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CMyForm, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMyForm::OnUnitTool)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMyForm::OnMapTool)
+	ON_BN_CLICKED(IDC_BUTTON8, &CMyForm::OnPathFind)
+	ON_BN_CLICKED(IDC_BUTTON9, &CMyForm::OnMySheet)
 END_MESSAGE_MAP()
 
 
@@ -60,6 +62,9 @@ void CMyForm::OnInitialUpdate()
 
 	GetDlgItem(IDC_BUTTON1)->SetFont(&m_Font);
 	GetDlgItem(IDC_BUTTON4)->SetFont(&m_Font);
+	GetDlgItem(IDC_BUTTON8)->SetFont(&m_Font);
+	GetDlgItem(IDC_BUTTON9)->SetFont(&m_Font);
+
 }
 
 
@@ -84,4 +89,21 @@ void CMyForm::OnMapTool()
 		m_MapTool.Create(IDD_MAPTOOL);
 
 	m_MapTool.ShowWindow(SW_SHOW);
+}
+
+
+void CMyForm::OnPathFind()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+
+	if (nullptr == m_PathFind.GetSafeHwnd())
+		m_PathFind.Create(IDD_CPathFind);
+
+	m_PathFind.ShowWindow(SW_SHOW);
+}
+
+
+void CMyForm::OnMySheet()
+{
 }

@@ -48,6 +48,10 @@ HRESULT CMultiTexture::Insert_Texture(const TCHAR * pFilePath, const TCHAR * pSt
 			return E_FAIL;
 		}
 
+		//알파 블랜딩
+		//D3DCOLOR ColorKey = D3DCOLOR_XRGB(212, 192, 212);
+		D3DCOLOR ColorKey = D3DCOLOR_ARGB(255,212, 192, 212);
+		
 		if (FAILED(D3DXCreateTextureFromFileEx(CDevice::Get_Instance()->Get_Device(),
 			szFullPath,
 			pTexInfo->tImgInfo.Width,
@@ -58,7 +62,7 @@ HRESULT CMultiTexture::Insert_Texture(const TCHAR * pFilePath, const TCHAR * pSt
 			D3DPOOL_MANAGED,
 			D3DX_DEFAULT,
 			D3DX_DEFAULT,
-			0,
+			ColorKey, //알파 블랜딩
 			nullptr,
 			nullptr,
 			&(pTexInfo->pTexture))))

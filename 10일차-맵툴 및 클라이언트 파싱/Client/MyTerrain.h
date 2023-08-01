@@ -19,6 +19,8 @@ public:
 
 private:
 	void		Load_Tile(const TCHAR* pFilePath);
+	void		Set_Ratio(D3DXMATRIX* pOut, float fRatioX, float fRatioY);
+
 private:
 	vector<TILE*>		m_vecTile;
 };

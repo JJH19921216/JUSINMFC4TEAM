@@ -64,6 +64,9 @@
     <Filter Include="05. Etc\01. FileInfo">
       <UniqueIdentifier>{09843c86-a5ea-4ab2-a8fc-62bc2ad663b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. FormView\DIalog\02.PathFind">
+      <UniqueIdentifier>{b07ab9b5-fde0-41ac-926a-889043f31d58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -123,6 +126,9 @@
     <ClInclude Include="FileInfo.h">
       <Filter>05. Etc\01. FileInfo</Filter>
     </ClInclude>
+    <ClInclude Include="PathFind.h">
+      <Filter>06. FormView\DIalog\02.PathFind</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -172,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="FileInfo.cpp">
       <Filter>05. Etc\01. FileInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFind.cpp">
+      <Filter>06. FormView\DIalog\02.PathFind</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
