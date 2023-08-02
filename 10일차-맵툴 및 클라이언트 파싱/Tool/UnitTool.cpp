@@ -53,7 +53,7 @@ void CUnitTool::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
 
-	ON_BN_CLICKED(IDC_BUTTON1, &CUnitTool::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON1, &CUnitTool::OnAddLine)
 
 	ON_LBN_SELCHANGE(IDC_LIST1, &CUnitTool::OnListBox)
 	ON_BN_CLICKED(IDC_BUTTON2, &CUnitTool::OnCreateUnit)
@@ -61,23 +61,16 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON5, &CUnitTool::OnDeleteData)
 	ON_BN_CLICKED(IDC_BUTTON6, &CUnitTool::OnSaveData)
 	ON_BN_CLICKED(IDC_BUTTON7, &CUnitTool::OnLoadData)
+	ON_BN_CLICKED(IDC_BUTTON10, &CUnitTool::OnDeleteLine)
+	ON_BN_CLICKED(IDC_BUTTON12, &CUnitTool::OnSaveLine)
+	ON_BN_CLICKED(IDC_BUTTON11, &CUnitTool::OnLoadLine)
 END_MESSAGE_MAP()
 
 
 // CUnitTool 메시지 처리기입니다.
 
 
-void CUnitTool::OnBnClickedButton1()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
-	UpdateData(TRUE);	// 다이얼로그 박스로부터 입력된 값을 얻어옴
-
-	m_strSrc = m_strTemp;
-
-	UpdateData(FALSE);	// 변수에 저장된 값을을 다이얼로그 박스에 반영
-
-}
 
 
 void CUnitTool::OnListBox()
@@ -416,4 +409,51 @@ void CUnitTool::OnLoadData()
 	}
 
 	UpdateData(FALSE);
+}
+
+
+void CUnitTool::OnDeleteLine()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);	// 다이얼로그 박스로부터 입력된 값을 얻어옴
+
+
+
+	UpdateData(FALSE);	// 변수에 저장된 값을을 다이얼로그 박스에 반영
+
+}
+
+
+void CUnitTool::OnSaveLine()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);	// 다이얼로그 박스로부터 입력된 값을 얻어옴
+
+
+
+	UpdateData(FALSE);	// 변수에 저장된 값을을 다이얼로그 박스에 반영
+
+}
+
+
+void CUnitTool::OnLoadLine()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);	// 다이얼로그 박스로부터 입력된 값을 얻어옴
+
+
+
+	UpdateData(FALSE);	// 변수에 저장된 값을을 다이얼로그 박스에 반영
+
+}
+void CUnitTool::OnAddLine()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	UpdateData(TRUE);	// 다이얼로그 박스로부터 입력된 값을 얻어옴
+
+
+
+	UpdateData(FALSE);	// 변수에 저장된 값을을 다이얼로그 박스에 반영
+
 }

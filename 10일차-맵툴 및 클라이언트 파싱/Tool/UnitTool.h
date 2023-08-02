@@ -22,7 +22,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedButton1();
+	afx_msg void OnAddLine();
 	afx_msg void OnListBox();
 	afx_msg void OnCreateUnit();	
 	virtual BOOL OnInitDialog();
@@ -49,6 +49,9 @@ public:
 	afx_msg void OnDeleteData();
 	afx_msg void OnSaveData();
 	afx_msg void OnLoadData();
+    afx_msg void OnDeleteLine();
+    afx_msg void OnSaveLine();
+    afx_msg void OnLoadLine();
 };
 
 // 저장하기, 불러오기, 삭제하기, 탐색하기(edit control 이용하여 탐색)

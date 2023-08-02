@@ -58,4 +58,24 @@ typedef struct tagTexturePath
 	int			iCount = 0;
 
 }IMGPATH;
+typedef	struct tagLinePoint
+{
+	tagLinePoint() { ZeroMemory(this, sizeof(tagLinePoint)); }
+	tagLinePoint(float _fX, float _fY) : fX(_fX), fY(_fY) {}
 
+	float	fX;
+	float	fY;
+
+}LINEPOINT;
+
+
+typedef struct tagLine
+{
+	tagLine() { ZeroMemory(this, sizeof(tagLine)); }
+	tagLine(LINEPOINT& _tLpoint, LINEPOINT& _tRpoint)
+		: tLpoint(_tLpoint), tRpoint(_tRpoint) { }
+
+	LINEPOINT	tLpoint;
+	LINEPOINT	tRpoint;
+
+}LINE;
