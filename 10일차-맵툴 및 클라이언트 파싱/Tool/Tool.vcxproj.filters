@@ -133,7 +133,7 @@
       <Filter>06. FormView\DIalog\02.PathFind</Filter>
     </ClInclude>
     <ClInclude Include="ObjectInfo.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>05. Etc\02.Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -189,7 +189,7 @@
       <Filter>06. FormView\DIalog\02.PathFind</Filter>
     </ClCompile>
     <ClCompile Include="ObjectInfo.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>05. Etc\02.Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
