@@ -19,7 +19,8 @@
 #endif
 
 HWND	g_hWnd;
-
+bool	g_TileEdit = false;
+bool	g_ObjEdit = false;
 // CToolView
 
 IMPLEMENT_DYNCREATE(CToolView, CScrollView)
@@ -183,8 +184,9 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	CMapTool*		pMapTool = &(pMyForm->m_MapTool);
 	
 	float fRatio = m_pTerrain->GetRatio();
-	m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* fRatio, 
-										(float)point.y + GetScrollPos(1)* fRatio, 0.f), pMapTool->m_iDrawID);
+	if (g_TileEdit)
+		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* fRatio, 
+											(float)point.y + GetScrollPos(1)* fRatio, 0.f), pMapTool->m_iDrawID);
 
 	// Invalidate : 호출 시, 윈도우의 WM_PAINT와 WM_ERASEBKGND 메세지를 발생시킴
 	// FALSE : WM_PAINT 메세지만 발생
@@ -210,8 +212,11 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 		CMapTool*		pMapTool = &(pMyForm->m_MapTool);
 
 		float fRatio = m_pTerrain->GetRatio();
-		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) * fRatio,
-			(float)point.y + GetScrollPos(1) * fRatio, 0.f), pMapTool->m_iDrawID);
+		if(g_TileEdit)
+			m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) * fRatio,
+				(float)point.y + GetScrollPos(1) * fRatio, 0.f), pMapTool->m_iDrawID);
+
+
 
 		Invalidate(FALSE);
 		
@@ -229,7 +234,7 @@ void CToolView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
 
 	float fRatio = m_pTerrain->GetRatio();
-	SetScrollSizes(MM_TEXT, CSize(TILEX * TILECX * fRatio, TILEY * TILECY * fRatio / 2));
+	SetScrollSizes(MM_TEXT, CSize(TILEX * TILECX * fRatio, TILEY * TILECY * fRatio / 2.f));
 
 	switch (nChar) {
 	case VK_UP:

@@ -38,4 +38,14 @@ public:
 	int		m_iDrawID = 0;
 
 	afx_msg void OnSaveData();
+	virtual BOOL OnInitDialog();
+
+	void GetResource(CString _Path, int _count);
+
+	CButton m_TileButton;
+	CButton m_ObjButton;
+	afx_msg void OnTileButton();
+	afx_msg void OnObjButton();
+	afx_msg void OnClose();
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 };
