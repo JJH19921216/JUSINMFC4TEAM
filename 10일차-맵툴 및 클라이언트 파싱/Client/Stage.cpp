@@ -4,6 +4,7 @@
 #include "ObjMgr.h"
 #include "ScrollMgr.h"
 #include "TimeMgr.h"
+#include "Player.h"
 
 CStage::CStage()
 {
@@ -40,6 +41,11 @@ HRESULT CStage::Ready_Scene()
 	CObjMgr::Get_Instance()->Add_Object(CObjMgr::PLAYER, pObj);*/
 	
 	CScrollMgr::Get_Instance()->Set_Scroll(WINCX * 0.5f, WINCY * 0.5f);
+
+	CObj* Temp = new CPlayer;
+	Temp->Initialize();
+	CObjMgr::Get_Instance()->Add_Object(CObjMgr::PLAYER, Temp);
+
 
 	return S_OK;
 }
