@@ -6,7 +6,7 @@
 #include "PathFind.h"
 #include "afxdialogex.h"
 #include "FileInfo.h"
-
+#include "TextureMgr.h"
 
 // CPathFind 대화 상자
 
@@ -58,6 +58,12 @@ void CPathFind::OnSaveData()
 		fout.close();
 	}
 
+	if (FAILED(CTextureMgr::Get_Instance()->ReadImgPath(L"../Data/ImgPath.txt")))
+	{
+		CTextureMgr::Get_Instance()->Release();
+		AfxMessageBox(L"ReadImgPath failed");
+	}
+
 	WinExec("notepad.exe ../Data/ImgPath.txt", SW_SHOW);
 }
 
@@ -99,6 +105,12 @@ void CPathFind::OnLoadData()
 		}
 
 		fin.close();
+	}
+
+	if (FAILED(CTextureMgr::Get_Instance()->ReadImgPath(L"../Data/ImgPath.txt")))
+	{
+		CTextureMgr::Get_Instance()->Release();
+		AfxMessageBox(L"ReadImgPath failed");
 	}
 
 	WinExec("notepad.exe ../Data/ImgPath.txt", SW_SHOW);
