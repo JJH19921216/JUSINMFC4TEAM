@@ -29,5 +29,8 @@ private:
 
 	ID m_eCurScene; 
 	ID m_eNextScene; 
+
+public:
+	void ZoomInOut();
 };
 

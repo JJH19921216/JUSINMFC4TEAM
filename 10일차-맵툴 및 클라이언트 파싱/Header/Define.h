@@ -3,9 +3,12 @@
 
 #define		WINCX		800
 #define		WINCY		600
+//
+//#define		TILECX			126
+//#define		TILECY			64
 
-#define		TILECX			130
-#define		TILECY			68
+#define		TILECX			62
+#define		TILECY			30
 
 #define		TILEX			20
 #define		TILEY			30
@@ -54,5 +57,6 @@ void ClassName::Destroy_Instance()						\
 }
 
 extern HWND		g_hWnd;
+extern float	g_Ratio;
 
 // 선언과 동시에 초기화 불가능, 먼저 선언된 전역변수와 자료형, 변수명까지 일치하는 상태에서만 사용 가능

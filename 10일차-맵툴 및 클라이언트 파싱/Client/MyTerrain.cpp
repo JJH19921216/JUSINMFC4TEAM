@@ -50,8 +50,10 @@ void CMyTerrain::Render(void)
 
 		const TEXINFO*		pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Terrain", L"Tile", iter->byDrawID);
 
-		float	fX = pTexInfo->tImgInfo.Width / 2.f;
-		float	fY = pTexInfo->tImgInfo.Height / 2.f;
+		float	fX = (pTexInfo->tImgInfo.Width ) / 2.f;
+		float	fY = (pTexInfo->tImgInfo.Height) / 2.f;
+
+		Set_Ratio(&matWorld, 1.f * g_Ratio, 1.f * g_Ratio);
 
 		CDevice::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
 		
@@ -61,16 +63,16 @@ void CMyTerrain::Render(void)
 			nullptr, // 위치 좌표에 대한 VEC3구조체 포인터, NULL인 경우 스크린 상 0, 0 좌표 출력
 			D3DCOLOR_ARGB(255, 255, 255, 255));// 출력할 원본 이미지와 섞을 색상 값, 출력 시 섞은 색상이 반영(0xffffffff를 넘겨주면 원본 색상 유지)
 
-		swprintf_s(szBuf, L"%d", iIndex);
+		//swprintf_s(szBuf, L"%d", iIndex);
 
-		CDevice::Get_Instance()->Get_Font()->DrawTextW(CDevice::Get_Instance()->Get_Sprite(),
-			szBuf,
-			lstrlen(szBuf),
-			nullptr,
-			0,
-			D3DCOLOR_ARGB(255, 255, 255, 255));
+		//CDevice::Get_Instance()->Get_Font()->DrawTextW(CDevice::Get_Instance()->Get_Sprite(),
+		//	szBuf,
+		//	lstrlen(szBuf),
+		//	nullptr,
+		//	0,
+		//	D3DCOLOR_ARGB(255, 255, 255, 255));
 
-		++iIndex;
+		//++iIndex;
 	}
 }
 
@@ -107,4 +109,17 @@ void CMyTerrain::Load_Tile(const TCHAR* pFilePath)
 
 	}
 	CloseHandle(hFile);
+}
+
+void CMyTerrain::Set_Ratio(D3DXMATRIX* pOut, float fRatioX, float fRatioY)
+{
+	pOut->_11 *= fRatioX;
+	pOut->_21 *= fRatioX;
+	pOut->_31 *= fRatioX;
+	pOut->_41 *= fRatioX;
+
+	pOut->_12 *= fRatioY;
+	pOut->_22 *= fRatioY;
+	pOut->_32 *= fRatioY;
+	pOut->_42 *= fRatioY;
 }

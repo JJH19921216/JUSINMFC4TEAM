@@ -62,8 +62,8 @@ HRESULT CDevice::Initialize()
 	D3DXFONT_DESCW			tFontInfo;
 	ZeroMemory(&tFontInfo, sizeof(D3DXFONT_DESCW));
 
-	tFontInfo.Height = 20;
-	tFontInfo.Width =  10;
+	tFontInfo.Height = 10;
+	tFontInfo.Width =  5;
 	tFontInfo.Weight = FW_HEAVY;
 	tFontInfo.CharSet = HANGEUL_CHARSET;
 	lstrcpy(tFontInfo.FaceName, L"궁서");
@@ -73,7 +73,6 @@ HRESULT CDevice::Initialize()
 		AfxMessageBox(L"Create Font Failed");
 		return E_FAIL;
 	}
-
 
 	return S_OK;
 }
@@ -88,7 +87,7 @@ void CDevice::Render_Begin()
 					D3DCOLOR_ARGB(255, 0, 0, 255),	// 후면 버퍼를 지우고 채울 색상
 					1.f,	// 깊이 버퍼 초기화 값
 					0);		// 스텐실 버퍼 초기화 값
-	
+
 	m_pDevice->BeginScene();
 	m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 
@@ -125,7 +124,6 @@ void CDevice::Set_Parameters(D3DPRESENT_PARAMETERS & d3dpp)
 
 	d3dpp.MultiSampleType    = D3DMULTISAMPLE_NONE;
 	d3dpp.MultiSampleQuality = 0;
-
 	// D3DSWAPEFFECT_DISCARD : 스왑 체인 방식
 	// D3DSWAPEFFECT_FLIP : 버퍼 하나로 뒤집으면서 사용하는 방식.
 	// D3DSWAPEFFECT_COPY : 더블 버퍼링과 유사한 복사 방식.

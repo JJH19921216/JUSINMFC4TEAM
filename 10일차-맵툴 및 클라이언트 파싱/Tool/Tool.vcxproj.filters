@@ -64,6 +64,9 @@
     <Filter Include="05. Etc\01. FileInfo">
       <UniqueIdentifier>{09843c86-a5ea-4ab2-a8fc-62bc2ad663b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. FormView\DIalog\02.PathFind">
+      <UniqueIdentifier>{b07ab9b5-fde0-41ac-926a-889043f31d58}</UniqueIdentifier>
+    </Filter>
     <Filter Include="05. Etc\02.Object">
       <UniqueIdentifier>{92516115-ef19-4a3b-8727-e8075d5f3e13}</UniqueIdentifier>
     </Filter>
@@ -126,6 +129,9 @@
     <ClInclude Include="FileInfo.h">
       <Filter>05. Etc\01. FileInfo</Filter>
     </ClInclude>
+    <ClInclude Include="PathFind.h">
+      <Filter>06. FormView\DIalog\02.PathFind</Filter>
+    </ClInclude>
     <ClInclude Include="ObjectInfo.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -178,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="FileInfo.cpp">
       <Filter>05. Etc\01. FileInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFind.cpp">
+      <Filter>06. FormView\DIalog\02.PathFind</Filter>
     </ClCompile>
     <ClCompile Include="ObjectInfo.cpp">
       <Filter>소스 파일</Filter>

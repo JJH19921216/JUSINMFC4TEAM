@@ -64,7 +64,47 @@ HRESULT CTextureMgr::Insert_Texture(const TCHAR * pFilePath, TEXTYPE eType, cons
 
 		m_mapTex.insert({ pObjKey, pTexture });
 	}
-	
+	else if (TEX_MULTI == eType)
+		iter->second->Insert_Texture(pFilePath, pStateKey, iCnt);
+
+	return S_OK;
+}
+
+HRESULT CTextureMgr::ReadImgPath(const wstring& wstrFilePath)
+{
+	wifstream		fin;
+
+	fin.open(wstrFilePath, ios::in);
+
+	if (!fin.fail())
+	{
+		TCHAR	szObjKey[MAX_STR] = L"";
+		TCHAR	szStateKey[MAX_STR] = L"";
+		TCHAR	szCount[MAX_STR] = L"";
+		TCHAR	szPath[MAX_PATH] = L"";
+
+		while (true)
+		{
+			fin.getline(szObjKey, MAX_STR, '|');
+			fin.getline(szStateKey, MAX_STR, '|');
+			fin.getline(szCount, MAX_STR, '|');
+			fin.getline(szPath, MAX_PATH);
+
+			if (fin.eof())
+				break;
+
+			int iCount = _ttoi(szCount);
+
+			if (FAILED(Insert_Texture(szPath, TEX_MULTI, szObjKey, szStateKey, iCount)))
+			{
+				ERR_MSG(szPath);
+				return E_FAIL;
+			}
+		}
+
+		fin.close();
+	}
+
 	return S_OK;
 }
 
