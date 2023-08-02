@@ -16,11 +16,16 @@ CTerrain::~CTerrain()
 
 void CTerrain::Initialize()
 {
-	if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(L"../Texture/Stage/Terrain/Tile/Tile%d.png", TEX_MULTI, L"Terrain", L"Tile", 36)))
-		AfxMessageBox(L"TILE IMG FAILED");
+	if (FAILED(CTextureMgr::Get_Instance()->ReadImgPath(L"../Data/ImgPath.txt")))
+	{
+		AfxMessageBox(L"ReadImgPath failed");
+	}
+
+	//if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(L"../Texture/Stage/Terrain/Tile/Tile%d.png", TEX_MULTI, L"Terrain", L"Tile", 36)))
+	//	AfxMessageBox(L"TILE IMG FAILED");
 	
-	if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(L"../Texture/Stage/Custom/Tile/%d.png", TEX_MULTI, L"Custom", L"Tile", 215)))
-		AfxMessageBox(L"TILE IMG FAILED");
+	//if (FAILED(CTextureMgr::Get_Instance()->Insert_Texture(L"../Texture/Stage/Custom/Tile/%d.png", TEX_MULTI, L"Custom", L"Tile", 215)))
+	//	AfxMessageBox(L"TILE IMG FAILED");
 
 
 	for (int i = 0; i < TILEY; ++i)
@@ -58,7 +63,7 @@ void CTerrain::Render()
 	for (auto& iter : m_vecTile)
 	{
 		//const TEXINFO*		pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Terrain", L"Tile", iter->byDrawID);
-		const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Custom", L"Tile", iter->byDrawID);
+		const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Map", L"Tile", iter->byDrawID);
 
 		D3DXMatrixIdentity(&matWorld);
 		D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
@@ -108,7 +113,7 @@ void CTerrain::Mini_Render()
 
 	for (auto& iter : m_vecTile)
 	{
-		const TEXINFO*		pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Terrain", L"Tile", iter->byDrawID);
+		const TEXINFO*		pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Map", L"Tile", iter->byDrawID);
 
 		D3DXMatrixIdentity(&matWorld);
 		D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);

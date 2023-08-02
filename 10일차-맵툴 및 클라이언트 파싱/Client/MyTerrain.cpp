@@ -48,7 +48,7 @@ void CMyTerrain::Render(void)
 
 		matWorld = matScale * matTrans;
 
-		const TEXINFO*		pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Terrain", L"Tile", iter->byDrawID);
+		const TEXINFO*		pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Custom", L"Tile", iter->byDrawID);
 
 		float	fX = (pTexInfo->tImgInfo.Width ) / 2.f;
 		float	fY = (pTexInfo->tImgInfo.Height) / 2.f;
