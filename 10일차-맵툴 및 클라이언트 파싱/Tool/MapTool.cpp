@@ -38,6 +38,8 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_ListBox);
 	DDX_Control(pDX, IDC_PICTURE, m_Picture);
+	DDX_Control(pDX, IDC_RADIO1, m_TileButton);
+	DDX_Control(pDX, IDC_RADIO2, m_ObjButton);
 }
 
 
@@ -45,6 +47,10 @@ BEGIN_MESSAGE_MAP(CMapTool, CDialog)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CMapTool::OnListBox)
 	ON_WM_DROPFILES()
 	ON_BN_CLICKED(IDC_BUTTON1, &CMapTool::OnSaveData)
+	ON_BN_CLICKED(IDC_RADIO1, &CMapTool::OnTileButton)
+	ON_BN_CLICKED(IDC_RADIO2, &CMapTool::OnObjButton)
+	ON_WM_CLOSE()
+	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
 
@@ -128,7 +134,7 @@ void CMapTool::OnDropFiles(HDROP hDropInfo)
 		if (iter == m_mapPngImg.end())
 		{
 			CImage* pPndImg = new CImage;
-
+			//pPndImg = CTextureMgr::Get_Instance()->Get_Texture(L"Map", L"Tile", iter->byDrawID)->pTexture;
 			pPndImg->Load(strRelativePath);
 
 			m_mapPngImg.insert({ strFileName, pPndImg });
@@ -217,4 +223,105 @@ void CMapTool::OnSaveData()
 		CloseHandle(hFile);
 
 	}
+}
+
+
+BOOL CMapTool::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+	// TODO:  여기에 추가 초기화 작업을 추가합니다.
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
+}
+
+void CMapTool::GetResource(CString _Path, int _count)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	UpdateData(TRUE);
+
+	TCHAR	szFilePath[MAX_PATH] = L"";
+	TCHAR	szFileName[MAX_STR] = L"";
+	
+	//ListBox, m_mapPngImg 초기화 
+	m_ListBox.ResetContent();
+	for_each(m_mapPngImg.begin(), m_mapPngImg.end(),
+		[](auto& MyPair) {
+
+			MyPair.second->Destroy();
+			Safe_Delete(MyPair.second);
+		});
+	m_mapPngImg.clear();
+
+	for (int i = 0; i < _count; ++i)
+	{
+		swprintf_s(szFilePath, _Path, i);
+		CString	strRelativePath = szFilePath;
+		
+		// PathFindFileName : 경로 중 파일 이름만 남기는 함수
+		CString	strFileName = PathFindFileName(strRelativePath);
+
+		lstrcpy(szFileName, strFileName.GetString());
+
+		//PathRemoveExtension : 확장자를 잘라내는 함수
+		PathRemoveExtension(szFileName);
+
+		strFileName = szFileName;
+
+		auto	iter = m_mapPngImg.find(strFileName);
+
+		if (iter == m_mapPngImg.end())
+		{
+			CImage* pPndImg = new CImage;
+			pPndImg->Load(strRelativePath);
+
+			m_mapPngImg.insert({ strFileName, pPndImg });
+			m_ListBox.AddString(strFileName);
+		}
+	}
+
+	Horizontal_Scroll();
+
+	UpdateData(FALSE);
+}
+
+
+void CMapTool::OnTileButton()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	GetResource(L"../Texture/Stage/Map/Tile/%d.png", 215);
+	g_TileEdit = TRUE;
+	g_ObjEdit = FALSE;
+}
+
+
+void CMapTool::OnObjButton()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	GetResource(L"../Texture/Stage/Map/Object/%d.png", 61);
+	g_TileEdit = FALSE;
+	g_ObjEdit = TRUE;
+}
+
+
+void CMapTool::OnClose()
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CDialog::OnClose();
+	g_TileEdit = FALSE;
+	g_ObjEdit = FALSE;
+}
+
+
+
+//Dialog 열때마다 한번씩 실행
+void CMapTool::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDialog::OnShowWindow(bShow, nStatus);
+	GetResource(L"../Texture/Stage/Map/Tile/%d.png", 215);
+	m_TileButton.SetCheck(TRUE);
+	g_TileEdit = TRUE;
+	g_ObjEdit = FALSE;
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 }
