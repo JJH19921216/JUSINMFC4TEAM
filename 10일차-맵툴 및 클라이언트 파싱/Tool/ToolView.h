@@ -8,6 +8,7 @@
 #include "TextureMgr.h"
 
 #include "Terrain.h"
+#include "Obj.h"
 
 class CToolDoc;
 class CToolView : public CScrollView
@@ -52,9 +53,13 @@ public:
 
 public:
 	CTerrain*		m_pTerrain;
+	CObj*			m_pObj;
+	CClientDC*		m_dc;
 
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+
+	CClientDC*			GetToolViewDC() { return m_dc; }
 };
 
 #ifndef _DEBUG  // ToolView.cpp의 디버그 버전

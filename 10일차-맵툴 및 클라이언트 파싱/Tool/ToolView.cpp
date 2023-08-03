@@ -38,7 +38,7 @@ END_MESSAGE_MAP()
 
 // CToolView 생성/소멸
 
-CToolView::CToolView() : m_pTerrain(nullptr)
+CToolView::CToolView() : m_pTerrain(nullptr), m_pObj(nullptr)
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
@@ -146,6 +146,12 @@ void CToolView::OnInitialUpdate()
 	m_pTerrain = new CTerrain;
 	m_pTerrain->Initialize();
 	m_pTerrain->Set_MainView(this);
+
+	m_pObj = new CObj;
+	m_pObj->Initialize();
+	m_pObj->Set_MainView(this);
+
+	m_dc = new CClientDC(this);
 }
 
 void CToolView::OnDraw(CDC* /*pDC*/)
@@ -158,7 +164,10 @@ void CToolView::OnDraw(CDC* /*pDC*/)
 	CDevice::Get_Instance()->Render_Begin();
 
 	m_pTerrain->Render();
+	m_pObj->Render();
 
+	if (g_ObjEdit)
+		m_pObj->Preview_Render();
 	CDevice::Get_Instance()->Render_End();
 }
 
@@ -167,6 +176,7 @@ void CToolView::OnDestroy()
 	CScrollView::OnDestroy();
 
 	Safe_Delete(m_pTerrain);
+	Safe_Delete(m_pObj);
 
 	CTextureMgr::Destroy_Instance();
 	CDevice::Get_Instance()->Destroy_Instance();
@@ -183,20 +193,20 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	CMyForm*		pMyForm = dynamic_cast<CMyForm*>(pMainFrm->m_SecondSplitter.GetPane(1, 0));
 	CMapTool*		pMapTool = &(pMyForm->m_MapTool);
 	
-	float fRatio = m_pTerrain->GetRatio();
 	if (g_TileEdit)
-		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* fRatio, 
-											(float)point.y + GetScrollPos(1)* fRatio, 0.f), pMapTool->m_iDrawID);
+		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* g_Ratio, 
+											(float)point.y + GetScrollPos(1)* g_Ratio, 0.f), pMapTool->m_iDrawID);
+
+	if (g_ObjEdit)
+		m_pObj->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0))/ g_Ratio,
+									   ((float)point.y + GetScrollPos(1))/ g_Ratio, 0.f), pMapTool->m_iDrawID);
 
 	// Invalidate : 호출 시, 윈도우의 WM_PAINT와 WM_ERASEBKGND 메세지를 발생시킴
 	// FALSE : WM_PAINT 메세지만 발생
 	// TRUE : WM_PAINT, WM_ERASEBKGND 메세지를 둘 다 발생
 
-	Invalidate(FALSE);
-
-	
+	Invalidate(FALSE);	
 	CMiniView*		pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
-
 	pMiniView->Invalidate(FALSE);
 
 }
@@ -204,24 +214,29 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	CScrollView::OnMouseMove(nFlags, point);
-
-	if (GetAsyncKeyState(VK_LBUTTON))
+	
+	if (g_TileEdit || g_ObjEdit)
 	{
-		CMainFrame*		pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
-		CMyForm*		pMyForm = dynamic_cast<CMyForm*>(pMainFrm->m_SecondSplitter.GetPane(1, 0));
-		CMapTool*		pMapTool = &(pMyForm->m_MapTool);
+		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+		CMyForm* pMyForm = dynamic_cast<CMyForm*>(pMainFrm->m_SecondSplitter.GetPane(1, 0));
+		CMapTool* pMapTool = &(pMyForm->m_MapTool);
 
-		float fRatio = m_pTerrain->GetRatio();
-		if(g_TileEdit)
-			m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) * fRatio,
-				(float)point.y + GetScrollPos(1) * fRatio, 0.f), pMapTool->m_iDrawID);
+		if (GetAsyncKeyState(VK_LBUTTON))
+		{
+			if (g_TileEdit)
+				m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) / g_Ratio,
+					(float)point.y + GetScrollPos(1) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 
+		}
 
+		if (g_ObjEdit)
+		{
+			m_pObj->SetPreview(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
+				((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
+		}
 
+		CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
 		Invalidate(FALSE);
-		
-		CMiniView*		pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
-
 		pMiniView->Invalidate(FALSE);
 	}
 }
@@ -233,15 +248,15 @@ void CToolView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
 
-	float fRatio = m_pTerrain->GetRatio();
-	SetScrollSizes(MM_TEXT, CSize(TILEX * TILECX * fRatio, TILEY * TILECY * fRatio / 2.f));
+	SetScrollSizes(MM_TEXT, CSize(TILEX * TILECX * g_Ratio, TILEY * TILECY * g_Ratio / 2.f));
 
 	switch (nChar) {
 	case VK_UP:
-		m_pTerrain->UpRatio();
+		g_Ratio += 0.1f;
 		break;
 	case VK_DOWN:
-		m_pTerrain->DownRatio();
+		if(g_Ratio > 0.1f)
+			g_Ratio -= 0.1f;
 		break;
 	}
 	Invalidate(FALSE);

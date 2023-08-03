@@ -4,6 +4,8 @@
 #include "Device.h"
 #include "ToolView.h"
 
+float	g_Ratio = 1.f;
+
 CTerrain::CTerrain()
 {
 	m_vecTile.reserve(TILEX * TILEY);
@@ -45,8 +47,6 @@ void CTerrain::Initialize()
 			m_vecTile.push_back(pTile);
 		}
 	}
-
-	m_Ratio = 1.5f;
 }
 
 void CTerrain::Update()
@@ -81,7 +81,7 @@ void CTerrain::Render()
 		float fX = WINCX / float(rc.right - rc.left);
 		float fY = WINCY / float(rc.bottom - rc.top);
 
-		Set_Ratio(&matWorld, fX * m_Ratio, fY * m_Ratio);
+		Set_Ratio(&matWorld, fX * g_Ratio, fY * g_Ratio);
 
 		float		fCenterX = (pTexInfo->tImgInfo.Width ) /2.f;
 		float		fCenterY = (pTexInfo->tImgInfo.Height) / 2.f;
@@ -249,10 +249,10 @@ bool CTerrain::Picking_Dot(const D3DXVECTOR3& vPos, const int& iIndex)
 
 	D3DXVECTOR3		vPoint[4]{
 
-	{ m_Ratio * m_vecTile[iIndex]->vPos.x , m_Ratio * m_vecTile[iIndex]->vPos.y + m_Ratio * (TILECY / 2.f), 0.f },
-	{ m_Ratio * m_vecTile[iIndex]->vPos.x + m_Ratio * (TILECX / 2.f), m_Ratio * m_vecTile[iIndex]->vPos.y, 0.f },
-	{ m_Ratio * m_vecTile[iIndex]->vPos.x,  m_Ratio * m_vecTile[iIndex]->vPos.y - m_Ratio * (TILECY / 2.f), 0.f },
-	{ m_Ratio * m_vecTile[iIndex]->vPos.x - m_Ratio * (TILECX / 2.f),m_Ratio * m_vecTile[iIndex]->vPos.y, 0.f }
+	{ g_Ratio * m_vecTile[iIndex]->vPos.x , g_Ratio * m_vecTile[iIndex]->vPos.y + g_Ratio * (TILECY / 2.f), 0.f },
+	{ g_Ratio * m_vecTile[iIndex]->vPos.x + g_Ratio * (TILECX / 2.f), g_Ratio * m_vecTile[iIndex]->vPos.y, 0.f },
+	{ g_Ratio * m_vecTile[iIndex]->vPos.x,  g_Ratio * m_vecTile[iIndex]->vPos.y - g_Ratio * (TILECY / 2.f), 0.f },
+	{ g_Ratio * m_vecTile[iIndex]->vPos.x - g_Ratio * (TILECX / 2.f),g_Ratio * m_vecTile[iIndex]->vPos.y, 0.f }
 
 	};
 	/*D3DXVECTOR3		vPoint[4]{
