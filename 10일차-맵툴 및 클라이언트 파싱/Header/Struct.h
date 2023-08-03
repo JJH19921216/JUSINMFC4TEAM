@@ -47,6 +47,16 @@ typedef struct tagObj
 	vector<D3DXVECTOR3> vecCollide; //콜라이더 정점 리스트
 }OBJ;
 
+typedef struct tagMonster
+{
+	D3DXVECTOR3	vPos;			// 타일의 중점 좌표
+	D3DXVECTOR3 vSize;			// 오브젝트의 가로, 세로 사이즈
+
+	BYTE		byOption;		// 0, 1번(장애물)
+	BYTE		byDrawID;
+	vector<D3DXVECTOR3> vecLineMove;// 몇 번 타일 이미지
+}Monster;
+
 typedef	struct tagUnitData
 {
 #ifdef _AFX

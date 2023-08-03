@@ -156,6 +156,9 @@
     <ClInclude Include="Line.h">
       <Filter>05. Etc\03.Line</Filter>
     </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>05. Etc\04. Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -220,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="Line.cpp">
       <Filter>05. Etc\03.Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>05. Etc\04. Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
