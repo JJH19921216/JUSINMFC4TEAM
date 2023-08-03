@@ -8,6 +8,7 @@
 #include "TextureMgr.h"
 
 #include "Terrain.h"
+#include "Line.h"
 
 class CToolDoc;
 class CToolView : public CScrollView
@@ -49,10 +50,13 @@ public:
 	virtual void OnInitialUpdate();
 	afx_msg void OnDestroy();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-
+public:
+	CClientDC*		GetToolViewDC() { return m_dc; }
 public:
 	CTerrain*		m_pTerrain;
-
+	CLine*			m_pLine;
+	CClientDC*		m_dc;
+	//CPoint			m_p;
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 };

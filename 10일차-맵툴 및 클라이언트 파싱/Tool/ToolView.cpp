@@ -21,6 +21,7 @@
 HWND	g_hWnd;
 bool	g_TileEdit = false;
 bool	g_ObjEdit = false;
+bool	g_LineEdit = false;
 // CToolView
 
 IMPLEMENT_DYNCREATE(CToolView, CScrollView)
@@ -146,9 +147,12 @@ void CToolView::OnInitialUpdate()
 	m_pTerrain = new CTerrain;
 	m_pTerrain->Initialize();
 	m_pTerrain->Set_MainView(this);
+
+	m_pLine = new CLine;
+	m_dc = new CClientDC(this);
 }
 
-void CToolView::OnDraw(CDC* /*pDC*/)
+void CToolView::OnDraw(CDC* pDC)
 {
 	CToolDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -158,6 +162,12 @@ void CToolView::OnDraw(CDC* /*pDC*/)
 	CDevice::Get_Instance()->Render_Begin();
 
 	m_pTerrain->Render();
+	
+// 	if (g_LineEdit)
+// 	{
+// 		m_pLine->Render(pDC);
+// 	}
+	
 
 	CDevice::Get_Instance()->Render_End();
 }
@@ -167,6 +177,8 @@ void CToolView::OnDestroy()
 	CScrollView::OnDestroy();
 
 	Safe_Delete(m_pTerrain);
+
+	Safe_Delete(m_pLine);
 
 	CTextureMgr::Destroy_Instance();
 	CDevice::Get_Instance()->Destroy_Instance();
@@ -191,14 +203,31 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	// Invalidate : 호출 시, 윈도우의 WM_PAINT와 WM_ERASEBKGND 메세지를 발생시킴
 	// FALSE : WM_PAINT 메세지만 발생
 	// TRUE : WM_PAINT, WM_ERASEBKGND 메세지를 둘 다 발생
+	CPen pen;
+	pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));    // 빨간색 펜 생성
+	CPen* oldPen = m_dc->SelectObject(&pen);
 
+	if (!g_LineEdit)
+	{
+		
+		m_dc->MoveTo(point.x, point.y);
+		m_pLine->SetStartPoint(point);
+		m_pLine->SetEndPoint(point);
+		// 		m_pLine->SetStartPoint(CPoint(((float)point.x + GetScrollPos(0)) / fRatio, ((float)point.y + GetScrollPos(1)) / fRatio));
+		// 		m_pLine->SetEndPoint(CPoint(((float)point.x + GetScrollPos(0)) / fRatio, ((float)point.y + GetScrollPos(1)) / fRatio));
+	}
+	else if (g_LineEdit)
+	{
+		m_pLine->SetStartPoint(point);
+	}
+	m_dc->SelectObject(oldPen);
+	
 	Invalidate(FALSE);
-
 	
 	CMiniView*		pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
 
 	pMiniView->Invalidate(FALSE);
-
+	
 }
 
 void CToolView::OnMouseMove(UINT nFlags, CPoint point)
@@ -215,14 +244,29 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 		if(g_TileEdit)
 			m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) * fRatio,
 				(float)point.y + GetScrollPos(1) * fRatio, 0.f), pMapTool->m_iDrawID);
-
-
-
-		Invalidate(FALSE);
 		
+		CPen pen;
+		pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));    // 빨간색 펜 생성
+		CPen* oldPen = m_dc->SelectObject(&pen);
+
+
+		if (g_LineEdit)
+		{
+			m_dc->SetROP2(R2_XORPEN);
+			m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
+			m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
+			m_pLine->SetEndPoint(point);
+			m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
+			m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
+		}
+		m_dc->SelectObject(oldPen);
+		Invalidate(FALSE);
+	
 		CMiniView*		pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
 
 		pMiniView->Invalidate(FALSE);
+		
+
 	}
 }
 

@@ -5,6 +5,7 @@
 #include "Tool.h"
 #include "UnitTool.h"
 #include "afxdialogex.h"
+#include "FileInfo.h"
 
 
 // CUnitTool 대화 상자입니다.
@@ -27,6 +28,14 @@ CUnitTool::~CUnitTool()
 {
 	for_each(m_mapUnitData.begin(), m_mapUnitData.end(), CDeleteMap());
 	m_mapUnitData.clear();
+	for_each(m_mapPngImg.begin(), m_mapPngImg.end(),
+		[](auto& MyPair) {
+
+			MyPair.second->Destroy();
+			Safe_Delete(MyPair.second);
+		});
+
+	m_mapPngImg.clear();
 
 }
 
@@ -48,6 +57,8 @@ void CUnitTool::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Control(pDX, IDC_BUTTON3, m_Bitmap);
 	DDX_Text(pDX, IDC_EDIT6, m_strFindName);
+	DDX_Control(pDX, IDC_PICTURE2, m_Picture2);
+	DDX_Control(pDX, IDC_LIST2, m_ListBox2);
 }
 
 
@@ -64,6 +75,8 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON10, &CUnitTool::OnDeleteLine)
 	ON_BN_CLICKED(IDC_BUTTON12, &CUnitTool::OnSaveLine)
 	ON_BN_CLICKED(IDC_BUTTON11, &CUnitTool::OnLoadLine)
+	ON_LBN_SELCHANGE(IDC_LIST2, &CUnitTool::OnCharcterListBox)
+	ON_WM_DROPFILES()
 END_MESSAGE_MAP()
 
 
@@ -415,11 +428,11 @@ void CUnitTool::OnLoadData()
 void CUnitTool::OnDeleteLine()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	UpdateData(TRUE);	// 다이얼로그 박스로부터 입력된 값을 얻어옴
+	
 
+	g_LineEdit = false;
 
-
-	UpdateData(FALSE);	// 변수에 저장된 값을을 다이얼로그 박스에 반영
+	
 
 }
 
@@ -427,11 +440,11 @@ void CUnitTool::OnDeleteLine()
 void CUnitTool::OnSaveLine()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	UpdateData(TRUE);	// 다이얼로그 박스로부터 입력된 값을 얻어옴
 
 
+	g_LineEdit = false;
 
-	UpdateData(FALSE);	// 변수에 저장된 값을을 다이얼로그 박스에 반영
+	
 
 }
 
@@ -439,21 +452,191 @@ void CUnitTool::OnSaveLine()
 void CUnitTool::OnLoadLine()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	UpdateData(TRUE);	// 다이얼로그 박스로부터 입력된 값을 얻어옴
 
 
+	g_LineEdit = false;
 
-	UpdateData(FALSE);	// 변수에 저장된 값을을 다이얼로그 박스에 반영
+	
 
 }
 void CUnitTool::OnAddLine()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
-	UpdateData(TRUE);	// 다이얼로그 박스로부터 입력된 값을 얻어옴
+	
+	g_LineEdit = true;
 
 
+	
 
-	UpdateData(FALSE);	// 변수에 저장된 값을을 다이얼로그 박스에 반영
+}
 
+void CUnitTool::OnCharcterListBox()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+
+	CString		strFindName;
+
+	//GetCurSel : 리스트 박스에서 선택한 목록의 인덱스를 반환
+
+	int		iIndex = m_ListBox2.GetCurSel();
+
+	if (LB_ERR == iIndex)
+		return;
+
+	// GetText : 해당 인덱스의 문자열을 얻어오는 함수
+	m_ListBox2.GetText(iIndex, strFindName);
+
+	auto		iter = m_mapPngImg.find(strFindName);
+
+	if (iter == m_mapPngImg.end())
+		return;
+
+	m_Picture2.SetBitmap(*(iter->second));
+
+	int i = 0;
+
+	for (; i < strFindName.GetLength(); ++i)
+	{
+		// isdigit : 매개 변수로 넘겨받은 단일 문자가 숫자 형태의 글자인지 문자 형태의 글자인지 판별하는 함수
+		// 숫자 형태의 문자라 판별될 경우 0이 아닌 값을 반환
+
+		if (0 != isdigit(strFindName[i]))
+			break;
+	}
+	// Delete(index, count) : 인덱스 위치로부터 카운트만큼 문자를 삭제하는 함수
+
+	strFindName.Delete(0, i);
+
+	m_iDrawID = _tstoi(strFindName);
+
+	UpdateData(FALSE);
+}
+
+void CUnitTool::GetResource(CString _Path, int _count)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	UpdateData(TRUE);
+
+	TCHAR	szFilePath[MAX_PATH] = L"";
+	TCHAR	szFileName[MAX_STR] = L"";
+
+	//ListBox, m_mapPngImg 초기화 
+	m_ListBox2.ResetContent();
+	for_each(m_mapPngImg.begin(), m_mapPngImg.end(),
+		[](auto& MyPair) {
+
+			MyPair.second->Destroy();
+			Safe_Delete(MyPair.second);
+		});
+	m_mapPngImg.clear();
+
+	for (int i = 0; i < _count; ++i)
+	{
+		swprintf_s(szFilePath, _Path, i);
+		CString	strRelativePath = szFilePath;
+
+		// PathFindFileName : 경로 중 파일 이름만 남기는 함수
+		CString	strFileName = PathFindFileName(strRelativePath);
+
+		lstrcpy(szFileName, strFileName.GetString());
+
+		//PathRemoveExtension : 확장자를 잘라내는 함수
+		PathRemoveExtension(szFileName);
+
+		strFileName = szFileName;
+
+		auto	iter = m_mapPngImg.find(strFileName);
+
+		if (iter == m_mapPngImg.end())
+		{
+			CImage* pPndImg = new CImage;
+			pPndImg->Load(strRelativePath);
+
+			m_mapPngImg.insert({ strFileName, pPndImg });
+			m_ListBox2.AddString(strFileName);
+		}
+	}
+
+	Horizontal_Scroll();
+
+	UpdateData(FALSE);
+}
+
+void CUnitTool::Horizontal_Scroll()
+{
+	CString	strName;
+	CSize	Size;
+
+	int	iWidth = 0;
+
+	CDC* pDC = m_ListBox2.GetDC();
+
+	for (int i = 0; i < m_ListBox2.GetCount(); ++i)
+	{
+		m_ListBox2.GetText(i, strName);
+
+		// GetTextExtent : 현재 문자열의 길이를 픽셀 단위로 반환
+		Size = pDC->GetTextExtent(strName);
+
+		if (Size.cx > iWidth)
+			iWidth = Size.cx;
+	}
+
+	m_ListBox2.ReleaseDC(pDC);
+
+	// GetHorizontalExtent : 리스트 박스가 가로로 스크롤 할 수 있는 최대 범위를 얻어오는 함수
+	if (iWidth > m_ListBox2.GetHorizontalExtent())
+		m_ListBox2.SetHorizontalExtent(iWidth);
+
+}
+
+
+void CUnitTool::OnDropFiles(HDROP hDropInfo)
+{
+	UpdateData(TRUE);
+
+	TCHAR	szFilePath[MAX_PATH] = L"";
+	TCHAR	szFileName[MAX_STR] = L"";
+
+	// DragQueryFile : 드롭된 파일의 정보를 얻어오는 함수
+	// 0xffffffff(-1)을 두 번째 매개 변수로 전달할 경우 드롭된 파일의 개수를 반환
+
+	int	iFileCnt = DragQueryFile(hDropInfo, 0xffffffff, nullptr, 0);
+
+	for (int i = 0; i < iFileCnt; ++i)
+	{
+		DragQueryFile(hDropInfo, i, szFilePath, MAX_PATH);
+
+		CString	strRelativePath = CFileInfo::ConvertRelativePath(szFilePath);
+
+		// PathFindFileName : 경로 중 파일 이름만 남기는 함수
+		CString	strFileName = PathFindFileName(strRelativePath);
+
+		lstrcpy(szFileName, strFileName.GetString());
+
+		//PathRemoveExtension : 확장자를 잘라내는 함수
+		PathRemoveExtension(szFileName);
+
+		strFileName = szFileName;
+
+		auto	iter = m_mapPngImg.find(strFileName);
+
+		if (iter == m_mapPngImg.end())
+		{
+			CImage* pPndImg = new CImage;
+			//pPndImg = CTextureMgr::Get_Instance()->Get_Texture(L"Map", L"Tile", iter->byDrawID)->pTexture;
+			pPndImg->Load(strRelativePath);
+
+			m_mapPngImg.insert({ strFileName, pPndImg });
+			m_ListBox2.AddString(strFileName);
+		}
+	}
+
+	Horizontal_Scroll();
+
+	CDialog::OnDropFiles(hDropInfo);
+
+	UpdateData(FALSE);
 }

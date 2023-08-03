@@ -292,6 +292,7 @@ void CMapTool::OnTileButton()
 	GetResource(L"../Texture/Stage/Map/Tile/%d.png", 215);
 	g_TileEdit = TRUE;
 	g_ObjEdit = FALSE;
+
 }
 
 

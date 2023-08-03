@@ -42,7 +42,11 @@ public:
 	CButton m_Check[3];
 	CButton m_Bitmap;
 	CString m_strFindName;
+	CStatic m_Picture2;
+	CListBox m_ListBox2;
 
+	map<CString, CImage*>	m_mapPngImg;
+	int		m_iDrawID = 0;
 public:
 	map<CString, UNITDATA*>		m_mapUnitData;
 
@@ -52,6 +56,13 @@ public:
     afx_msg void OnDeleteLine();
     afx_msg void OnSaveLine();
     afx_msg void OnLoadLine();
+  
+	afx_msg void OnCharcterListBox();
+	void GetResource(CString _Path, int _count);
+private:
+	void	Horizontal_Scroll();
+public:
+	afx_msg void OnDropFiles(HDROP hDropInfo);
 };
 
 // 저장하기, 불러오기, 삭제하기, 탐색하기(edit control 이용하여 탐색)

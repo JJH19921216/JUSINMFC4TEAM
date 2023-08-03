@@ -191,6 +191,7 @@
   <ItemGroup>
     <ClInclude Include="Device.h" />
     <ClInclude Include="FileInfo.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MapTool.h" />
     <ClInclude Include="MiniView.h" />
@@ -212,6 +213,7 @@
   <ItemGroup>
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="FileInfo.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MapTool.cpp" />
     <ClCompile Include="MiniView.cpp" />
