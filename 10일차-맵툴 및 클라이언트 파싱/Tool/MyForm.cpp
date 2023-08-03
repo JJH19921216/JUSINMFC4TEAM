@@ -58,7 +58,7 @@ void CMyForm::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// CreatePointFont(ÆùÆ® Å©±â, ±Û¾¾Ã¼)
-	m_Font.CreatePointFont(180, L"±Ã¼­");
+	m_Font.CreatePointFont(100, L"±¼¸²");
 
 	GetDlgItem(IDC_BUTTON1)->SetFont(&m_Font);
 	GetDlgItem(IDC_BUTTON4)->SetFont(&m_Font);
@@ -108,4 +108,8 @@ void CMyForm::OnPathFind()
 
 void CMyForm::OnMySheet()
 {
+	if (nullptr == m_CollideTool.GetSafeHwnd())
+		m_CollideTool.Create(IDD_CColliderTool);
+
+	m_CollideTool.ShowWindow(SW_SHOW);
 }
