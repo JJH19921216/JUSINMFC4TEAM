@@ -25,10 +25,12 @@ CColliderTool::~CColliderTool()
 void CColliderTool::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST1, m_ListBox);
 }
 
 
 BEGIN_MESSAGE_MAP(CColliderTool, CDialog)
+	ON_LBN_SELCHANGE(IDC_LIST1, &CColliderTool::OnListBox)
 END_MESSAGE_MAP()
 
 
@@ -81,8 +83,8 @@ BOOL CColliderTool::OnInitDialog()
 
 	CRect dialogRect;
 	GetClientRect(dialogRect); // 다이얼로그의 크기를 얻어옴
-	dialogRect.right -= 100.f;
-	dialogRect.bottom -= 100.f;
+	dialogRect.right -= dialogRect.Width() * 0.5f;
+	dialogRect.bottom -= 50.f;
 
 	CRuntimeClass* pClass = RUNTIME_CLASS(CFrameWnd);
 	CFrameWnd* m_pFrameWnd = (CFrameWnd*)pClass->CreateObject();
@@ -104,8 +106,54 @@ BOOL CColliderTool::OnInitDialog()
 	dialogRect.OffsetRect(-2, -2);
 	m_CollideView->SetWindowPos(NULL, -1, -1, dialogRect.Width(), dialogRect.Height(), 0);
 
-
+	GetResource(L"../Texture/Stage/Map/Object/%d.png", 61);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
+}
+
+void CColliderTool::GetResource(CString _Path, int _count)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	UpdateData(TRUE);
+
+	TCHAR	szFilePath[MAX_PATH] = L"";
+	TCHAR	szFileName[MAX_STR] = L"";
+
+	//ListBox, m_mapPngImg 초기화 
+	m_ListBox.ResetContent();
+
+	for (int i = 0; i < _count; ++i)
+	{
+		CString	strFileName;
+		strFileName.Format(_T("%d"), i);
+		m_ListBox.AddString(strFileName);
+	}
+
+	UpdateData(FALSE);
+}
+
+
+void CColliderTool::OnListBox()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	UpdateData(TRUE);
+
+	CString		strFindName;
+
+	//GetCurSel : 리스트 박스에서 선택한 목록의 인덱스를 반환
+
+	int		iIndex = m_ListBox.GetCurSel();
+
+	if (LB_ERR == iIndex)
+		return;
+
+	// GetText : 해당 인덱스의 문자열을 얻어오는 함수
+	m_ListBox.GetText(iIndex, strFindName);
+	m_CollideView->m_pObj->SetCLPreview( iIndex );
+
+	m_CollideView->Invalidate();
+	UpdateData(FALSE);
+
 }

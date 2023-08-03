@@ -4,6 +4,8 @@
 
 // CCollideView 보기
 
+#include "Obj.h"
+
 class CCollideView : public CScrollView
 {
 	friend class CColliderTool;
@@ -32,9 +34,24 @@ public:/*
 			, UINT nID, CCreateContext * pContext = NULL);*/
 
 
+	CObj* m_pObj;
+	CClientDC* m_DC;
 
+	bool	   m_bDrawStart;
+	bool	   m_bDrawEnd;
 	//virtual CDocument* GetDocument() const;
 	DECLARE_MESSAGE_MAP()
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+
+
+	D3DXVECTOR3	StartPoint;
+	D3DXVECTOR3	EndPoint;
+	map<BYTE, vector<D3DXVECTOR3>> m_CollideList;
+
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+	void		 ColliderRender();
 };
 
 

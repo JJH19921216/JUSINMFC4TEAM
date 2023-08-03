@@ -26,4 +26,9 @@ protected:
 public:
 	CCollideView*		m_CollideView;
 	virtual BOOL OnInitDialog();
+
+	void GetResource(CString _Path, int _count);
+	CListBox m_ListBox;
+	afx_msg void OnListBox();
+
 };
