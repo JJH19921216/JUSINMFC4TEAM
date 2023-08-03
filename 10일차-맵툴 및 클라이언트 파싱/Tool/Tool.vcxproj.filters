@@ -79,6 +79,9 @@
     <Filter Include="05. Etc\03.Line">
       <UniqueIdentifier>{f8fd69e7-7792-4e9b-a5c9-3a4c0ae6b5b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Etc\04. Monster">
+      <UniqueIdentifier>{979a0470-98db-41df-be7b-0d1f17bae381}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
