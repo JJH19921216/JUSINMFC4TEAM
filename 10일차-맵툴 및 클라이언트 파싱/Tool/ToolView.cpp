@@ -206,8 +206,8 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	CMapTool*		pMapTool = &(pMyForm->m_MapTool);
 	
 	if (g_TileEdit)
-		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* g_Ratio, 
-											(float)point.y + GetScrollPos(1)* g_Ratio, 0.f), pMapTool->m_iDrawID);
+		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* fRatio, 
+											(float)point.y + GetScrollPos(1)* fRatio, 0.f), pMapTool->m_iDrawID);
 
 	if (g_ObjEdit)
 		m_pObj->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0))/ g_Ratio,
@@ -230,6 +230,7 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 		m_pLine->SetEndPoint(point);
 		// 		m_pLine->SetStartPoint(CPoint(((float)point.x + GetScrollPos(0)) / fRatio, ((float)point.y + GetScrollPos(1)) / fRatio));
 		// 		m_pLine->SetEndPoint(CPoint(((float)point.x + GetScrollPos(0)) / fRatio, ((float)point.y + GetScrollPos(1)) / fRatio));
+		Invalidate(FALSE);
 	}
 	else if (g_LineEdit)
 	{
@@ -237,7 +238,6 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	m_dc->SelectObject(oldPen);
 	
-	Invalidate(FALSE);
 	
 	
 }
@@ -259,7 +259,9 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 					(float)point.y + GetScrollPos(1) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 
 		float fRatio = m_pTerrain->GetRatio();
-		
+		if(g_TileEdit)
+			m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) * fRatio,
+				(float)point.y + GetScrollPos(1) * fRatio, 0.f), pMapTool->m_iDrawID);
 		
 		CPen pen;
 		pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));    // »¡°£»ö Ææ »ý¼º
@@ -281,10 +283,29 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 			m_pLine->SetEndPoint(point);
 			m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
 			m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
+			Invalidate(FALSE);
 		}
 		m_dc->SelectObject(oldPen);
 		CMiniView*		pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
 
+		pMiniView->Invalidate(FALSE);
+		
+		{
+			if (g_TileEdit)
+				m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) / g_Ratio,
+					(float)point.y + GetScrollPos(1) / g_Ratio, 0.f), pMapTool->m_iDrawID);
+
+		}
+
+		if (g_ObjEdit)
+		{
+			m_pObj->SetPreview(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
+				((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
+		}
+
+		CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
+		Invalidate(FALSE);
+>>>>>>>>> Temporary merge branch 2
 		pMiniView->Invalidate(FALSE);
 		
 
