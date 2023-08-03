@@ -77,6 +77,7 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON11, &CUnitTool::OnLoadLine)
 	ON_LBN_SELCHANGE(IDC_LIST2, &CUnitTool::OnCharcterListBox)
 	ON_WM_DROPFILES()
+	ON_BN_CLICKED(IDC_BUTTON13, &CUnitTool::OnMonsterButton)
 END_MESSAGE_MAP()
 
 
@@ -639,4 +640,13 @@ void CUnitTool::OnDropFiles(HDROP hDropInfo)
 	CDialog::OnDropFiles(hDropInfo);
 
 	UpdateData(FALSE);
+}
+
+
+void CUnitTool::OnMonsterButton()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	GetResource(L"../Texture/Stage/Monster/%d.png", 3);
+	g_LineEdit = FALSE;
+	g_MonsterEdit = TRUE;
 }

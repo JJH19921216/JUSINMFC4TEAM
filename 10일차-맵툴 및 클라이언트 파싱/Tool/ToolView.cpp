@@ -22,6 +22,7 @@ HWND	g_hWnd;
 bool	g_TileEdit = false;
 bool	g_ObjEdit = false;
 bool	g_LineEdit = false;
+bool	g_MonsterEdit = false;
 // CToolView
 
 IMPLEMENT_DYNCREATE(CToolView, CScrollView)
@@ -39,7 +40,7 @@ END_MESSAGE_MAP()
 
 // CToolView 생성/소멸
 
-CToolView::CToolView() : m_pTerrain(nullptr), m_pObj(nullptr)
+CToolView::CToolView() : m_pTerrain(nullptr), m_pObj(nullptr),m_pMonster(nullptr)
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
@@ -152,6 +153,9 @@ void CToolView::OnInitialUpdate()
 	m_pObj->Initialize();
 	m_pObj->Set_MainView(this);
 
+	m_pMonster = new CMonster;
+	m_pMonster->Initialize();
+	m_pMonster->Set_MainView(this);
 
 	m_pLine = new CLine;
 	m_dc = new CClientDC(this);
@@ -168,7 +172,11 @@ void CToolView::OnDraw(CDC* pDC)
 
 	m_pTerrain->Render();
 	m_pObj->Render();
+	m_pMonster->Render();
 	//m_pLine->Render(pDC);
+
+	if (g_MonsterEdit)
+		m_pMonster->Preview_Render();
 
 	if (g_ObjEdit)
 		m_pObj->Preview_Render();
@@ -181,7 +189,7 @@ void CToolView::OnDestroy()
 
 	Safe_Delete(m_pTerrain);
 	Safe_Delete(m_pObj);
-
+	Safe_Delete(m_pMonster);
 	Safe_Delete(m_pLine);
 
 	CTextureMgr::Destroy_Instance();
@@ -206,6 +214,9 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (g_ObjEdit)
 		m_pObj->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0))/ g_Ratio,
 									   ((float)point.y + GetScrollPos(1))/ g_Ratio, 0.f), pMapTool->m_iDrawID);
+	if (g_MonsterEdit)
+		m_pObj->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
+									   ((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 
 	// Invalidate : 호출 시, 윈도우의 WM_PAINT와 WM_ERASEBKGND 메세지를 발생시킴
 	// FALSE : WM_PAINT 메세지만 발생
@@ -240,7 +251,7 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	CScrollView::OnMouseMove(nFlags, point);
 	
-	if (g_TileEdit || g_ObjEdit)
+	if (g_TileEdit || g_ObjEdit ||g_LineEdit||g_MonsterEdit)
 	{
 		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 		CMyForm* pMyForm = dynamic_cast<CMyForm*>(pMainFrm->m_SecondSplitter.GetPane(1, 0));
@@ -252,20 +263,21 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 				m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) / g_Ratio,
 					(float)point.y + GetScrollPos(1) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 
+			if (g_MonsterEdit)
+				m_pMonster->SetPreview(D3DXVECTOR3((float)point.x + GetScrollPos(0) / g_Ratio,
+					(float)point.y + GetScrollPos(1) / g_Ratio, 0.f), pMapTool->m_iDrawID);
+
 			
-
-			CPen pen;
-			pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));    // 빨간색 펜 생성
-			CPen* oldPen = m_dc->SelectObject(&pen);
-
 			if (g_ObjEdit)
 			{
 				m_pObj->SetPreview(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
 					((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 			}
 
+			CPen pen;
+			pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));    // 빨간색 펜 생성
+			CPen* oldPen = m_dc->SelectObject(&pen);
 			
-
 			if (g_LineEdit)
 			{
 				m_dc->SetROP2(R2_XORPEN);

@@ -53,8 +53,9 @@ typedef struct tagMonster
 	D3DXVECTOR3 vSize;			// 오브젝트의 가로, 세로 사이즈
 
 	BYTE		byOption;		// 0, 1번(장애물)
-	BYTE		byDrawID;
-	vector<D3DXVECTOR3> vecLineMove;// 몇 번 타일 이미지
+	BYTE		byDrawID;		// 몇 번 타일 이미지
+
+	vector<D3DXVECTOR3> vecLineMove;
 }Monster;
 
 typedef	struct tagUnitData

@@ -63,6 +63,7 @@ private:
 	void	Horizontal_Scroll();
 public:
 	afx_msg void OnDropFiles(HDROP hDropInfo);
+	afx_msg void OnMonsterButton();
 };
 
 // 저장하기, 불러오기, 삭제하기, 탐색하기(edit control 이용하여 탐색)
