@@ -47,6 +47,15 @@ typedef struct tagObj
 	vector<D3DXVECTOR3> vecCollide; //콜라이더 정점 리스트
 }OBJ;
 
+typedef struct tagHistory
+{
+	int		iIndex = 0;
+	BYTE	byDrawID = 0;
+	D3DXVECTOR3 vPos = {};
+
+} HISTORY;
+
+
 typedef	struct tagUnitData
 {
 #ifdef _AFX

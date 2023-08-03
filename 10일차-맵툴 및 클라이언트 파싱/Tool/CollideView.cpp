@@ -118,9 +118,11 @@ void CCollideView::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		StartPoint.x = point.x + GetScrollPos(0);
 		StartPoint.y = point.y + GetScrollPos(1);
-		EndPoint.x = point.x + GetScrollPos(0);
-		EndPoint.y = point.y + GetScrollPos(1);
+		//EndPoint.x = point.x + GetScrollPos(0);
+		//EndPoint.y = point.y + GetScrollPos(1);
+
 		m_CollideList[m_pObj->m_PreviewObj.byDrawID].push_back({ (float)StartPoint.x,(float)StartPoint.y,0.f });
+		
 	}
 
 	m_DC->SelectObject(oldPen);

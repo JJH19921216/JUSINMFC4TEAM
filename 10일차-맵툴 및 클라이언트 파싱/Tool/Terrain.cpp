@@ -166,8 +166,14 @@ void CTerrain::Tile_Change(const D3DXVECTOR3 & vPos, const BYTE & byDrawID)
 	if (-1 == iIndex)
 		return;
 
-	m_vecTile[iIndex]->byDrawID = byDrawID;
-	m_vecTile[iIndex]->byOption = 1;
+	if (m_vecTile[iIndex]->byDrawID != byDrawID)
+	{
+		m_UndoList.push_back({ iIndex,m_vecTile[iIndex]->byDrawID });
+		m_vecTile[iIndex]->byDrawID = byDrawID;
+		m_vecTile[iIndex]->byOption = 1;
+		
+		m_RedoList.clear();
+	}
 }
 
 int CTerrain::Get_TileIdx(const D3DXVECTOR3 & vPos)
@@ -303,3 +309,24 @@ bool CTerrain::Picking_Dot(const D3DXVECTOR3& vPos, const int& iIndex)
 
 	return true;
 }
+
+void CTerrain::TileUndo()
+{
+	if (!m_UndoList.empty())
+	{
+		m_RedoList.push_back({ m_UndoList.back().iIndex ,m_vecTile[m_UndoList.back().iIndex]->byDrawID });
+		m_vecTile[m_UndoList.back().iIndex]->byDrawID = m_UndoList.back().byDrawID;
+		m_UndoList.pop_back();
+	}
+}
+
+void CTerrain::TileRedo()
+{
+	if (!m_RedoList.empty())
+	{
+		m_UndoList.push_back({ m_RedoList.back().iIndex ,m_vecTile[m_RedoList.back().iIndex]->byDrawID });
+		m_vecTile[m_RedoList.back().iIndex]->byDrawID = m_RedoList.back().byDrawID;
+		m_RedoList.pop_back();
+	}
+}
+

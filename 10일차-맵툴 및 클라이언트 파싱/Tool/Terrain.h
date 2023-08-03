@@ -3,6 +3,7 @@
 #include "Include.h"
 
 class CToolView;
+
 class CTerrain
 {
 public:
@@ -28,10 +29,13 @@ public:
 	int			Get_TileIdx(const D3DXVECTOR3& vPos);
 	bool		Picking(const D3DXVECTOR3& vPos, const int& iIndex);
 	bool		Picking_Dot(const D3DXVECTOR3& vPos, const int& iIndex);
-private:
+public:
 	vector<TILE*>		m_vecTile;
 	CToolView*			m_pMainView = nullptr;
+	list < HISTORY > m_UndoList;
+	list < HISTORY > m_RedoList;
 
-
+	void		TileRedo();
+	void		TileUndo();
 };
 

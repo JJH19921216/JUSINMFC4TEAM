@@ -51,6 +51,8 @@ BEGIN_MESSAGE_MAP(CMapTool, CDialog)
 	ON_BN_CLICKED(IDC_RADIO2, &CMapTool::OnObjButton)
 	ON_WM_CLOSE()
 	ON_WM_SHOWWINDOW()
+	ON_BN_CLICKED(IDC_BUTTON2, &CMapTool::OnUndoButton)
+	ON_BN_CLICKED(IDC_BUTTON10, &CMapTool::OnRedoButton)
 END_MESSAGE_MAP()
 
 
@@ -77,7 +79,7 @@ void CMapTool::OnListBox()
 
 	if (iter == m_mapPngImg.end())
 		return;
-
+	ResizeDialog((iter->second));
 	m_Picture.SetBitmap(*(iter->second));
 
 	int i = 0;
@@ -282,6 +284,9 @@ void CMapTool::GetResource(CString _Path, int _count)
 
 	Horizontal_Scroll();
 
+
+	GetWindowRect(OriginDialogRect);
+
 	UpdateData(FALSE);
 }
 
@@ -324,4 +329,76 @@ void CMapTool::OnShowWindow(BOOL bShow, UINT nStatus)
 	g_TileEdit = TRUE;
 	g_ObjEdit = FALSE;
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+}
+
+void CMapTool::ResizeDialog(CImage* _img)
+{
+	CRect dialogRect; 
+	GetWindowRect(dialogRect);
+		
+	SetWindowPos(NULL, dialogRect.left, dialogRect.top, OriginDialogRect.Width()+ _img->GetWidth() * 1, OriginDialogRect.Height() + _img->GetHeight() * 0.5f, 0);
+}
+
+
+void CMapTool::OnUndoButton()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	// AfxGetApp : 메인 쓰레드를 갖고 있는 현재 메인 app을 반환
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+
+	//GetPane(행, 열) : 해당하는 창의 정보를 얻어오는 함수 
+	CToolView* pMainView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+
+	if (g_TileEdit)
+	{
+		CTerrain* pTerrain = pMainView->m_pTerrain;
+		pTerrain->TileUndo(); 
+		
+		CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
+		pMainView->Invalidate(FALSE);
+		pMiniView->Invalidate(FALSE);
+		
+	}
+	else if (g_ObjEdit)
+	{
+		CObj* pObj = pMainView->m_pObj;
+		pObj->ObjUndo();
+		CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
+		pMainView->Invalidate(FALSE);
+		pMiniView->Invalidate(FALSE);
+
+	}
+
+}
+
+
+void CMapTool::OnRedoButton()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	// AfxGetApp : 메인 쓰레드를 갖고 있는 현재 메인 app을 반환
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+
+	//GetPane(행, 열) : 해당하는 창의 정보를 얻어오는 함수 
+	CToolView* pMainView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+
+	if (g_TileEdit)
+	{
+		CTerrain* pTerrain = pMainView->m_pTerrain;
+		pTerrain->TileRedo();
+		
+		CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
+		pMainView->Invalidate(FALSE);
+		pMiniView->Invalidate(FALSE);
+
+	}
+	else if (g_ObjEdit)
+	{
+		CObj* pObj = pMainView->m_pObj;
+		pObj->ObjRedo();
+		CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
+		pMainView->Invalidate(FALSE);
+		pMiniView->Invalidate(FALSE);
+
+	}
+
 }

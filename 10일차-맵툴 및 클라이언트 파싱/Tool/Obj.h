@@ -40,5 +40,9 @@ public:
 	void	   CLPreview_Render();
 	void	   SetCLPreview(const BYTE& byDrawID) {m_PreviewObj.byDrawID = byDrawID; }
 
+	vector<OBJ*>	m_vecRedolist;
+	vector<OBJ*>	m_vecRender;
+	void		ObjRedo();
+	void		ObjUndo();
 };
 

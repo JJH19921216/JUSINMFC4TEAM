@@ -31,14 +31,21 @@ void CObj::Render()
 	TCHAR		szBuf[MIN_STR] = L"";
 	int			iIndex = 0;
 
-	for (auto& iter : m_vecObj)
+	//y좌표 기준 렌더 순서 조정 (작을수록 뒤로 배치)
+	m_vecRender = m_vecObj;
+	sort(m_vecRender.begin(), m_vecRender.end(), [](OBJ* first, OBJ* second)
+		{
+			return first->vPos.y < second->vPos.y;
+		});
+
+	for (auto& iter : m_vecRender)
 	{
 		const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Map", L"Object", iter->byDrawID);
 
 		D3DXMatrixIdentity(&matWorld);
 		D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
-		D3DXMatrixTranslation(&matTrans, iter->vPos.x - m_pMainView->GetScrollPos(0),
-			iter->vPos.y - m_pMainView->GetScrollPos(1),
+		D3DXMatrixTranslation(&matTrans, iter->vPos.x - m_pMainView->GetScrollPos(0) / g_Ratio,
+			iter->vPos.y - m_pMainView->GetScrollPos(1) / g_Ratio,
 			iter->vPos.z);
 
 		matWorld = matScale * matTrans;
@@ -64,8 +71,32 @@ void CObj::Render()
 			nullptr, // 위치 좌표에 따른 vector3 구조체 포인어
 			D3DCOLOR_ARGB(255, 255, 255, 255)); 	// 출력할 원본 이미지와 섞을 색상 값, 출력 시 섞은 색이 반영, 0xffffffff를 넘겨주면 원본 색상 유지
 
-		swprintf_s(szBuf, L"%d", iIndex);
 
+		
+	}
+
+	for (auto& iter : m_vecObj)
+	{
+		D3DXMatrixIdentity(&matWorld);
+		D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
+		D3DXMatrixTranslation(&matTrans, iter->vPos.x - m_pMainView->GetScrollPos(0) / g_Ratio,
+			iter->vPos.y - m_pMainView->GetScrollPos(1) / g_Ratio,
+			iter->vPos.z);
+
+		matWorld = matScale * matTrans;
+
+		RECT		rc{};
+
+		// GetClientRect : 현재 클라이언트 영역의 렉트 정보를 얻어옴
+		GetClientRect(m_pMainView->m_hWnd, &rc);
+
+		float fX = WINCX / float(rc.right - rc.left);
+		float fY = WINCY / float(rc.bottom - rc.top);
+
+		Set_Ratio(&matWorld, fX * g_Ratio, fY * g_Ratio);
+
+		CDevice::Get_Instance()->Get_Sprite()->SetTransform(&matWorld);
+		swprintf_s(szBuf, L"%d", iIndex);
 		CDevice::Get_Instance()->Get_Font()->DrawTextW(CDevice::Get_Instance()->Get_Sprite(),
 			szBuf,
 			lstrlen(szBuf),
@@ -114,6 +145,10 @@ void CObj::Release()
 	for_each(m_vecObj.begin(), m_vecObj.end(), CDeleteObj());
 	m_vecObj.clear();
 	m_vecObj.shrink_to_fit();
+
+	for_each(m_vecRedolist.begin(), m_vecRedolist.end(), CDeleteObj());
+	m_vecRedolist.clear();
+	m_vecRedolist.shrink_to_fit();
 }
 
 void CObj::Set_Ratio(D3DXMATRIX* pOut, float fRatioX, float fRatioY)
@@ -137,8 +172,11 @@ void CObj::Add_Object(const D3DXVECTOR3& vPos, const BYTE& byDrawID)
 	pObj->vSize = { (float)TILECX, (float)TILECY, 0.f };
 	pObj->byOption = 0;
 	pObj->byDrawID = byDrawID;
-
+	
 	m_vecObj.push_back(pObj);
+
+	for_each(m_vecRedolist.begin(), m_vecRedolist.end(), CDeleteObj());
+	m_vecRedolist.clear();
 }
 
 int CObj::Get_TileIdx(const D3DXVECTOR3& vPos)
@@ -160,8 +198,8 @@ void CObj::Preview_Render()
 
 	D3DXMatrixIdentity(&matWorld);
 	D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
-	D3DXMatrixTranslation(&matTrans, m_PreviewObj.vPos.x - m_pMainView->GetScrollPos(0),
-		m_PreviewObj.vPos.y - m_pMainView->GetScrollPos(1),
+	D3DXMatrixTranslation(&matTrans, m_PreviewObj.vPos.x - m_pMainView->GetScrollPos(0) / g_Ratio,
+		m_PreviewObj.vPos.y - m_pMainView->GetScrollPos(1) / g_Ratio,
 		m_PreviewObj.vPos.z);
 
 	matWorld = matScale * matTrans;
@@ -228,3 +266,22 @@ void CObj::CLPreview_Render()
 		D3DCOLOR_ARGB(255, 255, 255, 255)); 	// 출력할 원본 이미지와 섞을 색상 값, 출력 시 섞은 색이 반영, 0xffffffff를 넘겨주면 원본 색상 유지
 
 }
+
+void CObj::ObjUndo()
+{
+	if (!m_vecObj.empty())
+	{
+		m_vecRedolist.push_back(m_vecObj.back());
+		m_vecObj.pop_back();
+	}
+}
+
+void CObj::ObjRedo()
+{
+	if (!m_vecRedolist.empty())
+	{
+		m_vecObj.push_back(m_vecRedolist.back());
+		m_vecRedolist.pop_back();
+	}
+}
+

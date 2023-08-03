@@ -48,4 +48,9 @@ public:
 	afx_msg void OnObjButton();
 	afx_msg void OnClose();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+
+	void		ResizeDialog(CImage* _img);
+	CRect		OriginDialogRect;
+	afx_msg void OnUndoButton();
+	afx_msg void OnRedoButton();
 };

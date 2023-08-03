@@ -197,7 +197,7 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* g_Ratio, 
 											(float)point.y + GetScrollPos(1)* g_Ratio, 0.f), pMapTool->m_iDrawID);
 
-	if (g_ObjEdit)
+	else if (g_ObjEdit)
 		m_pObj->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0))/ g_Ratio,
 									   ((float)point.y + GetScrollPos(1))/ g_Ratio, 0.f), pMapTool->m_iDrawID);
 
@@ -221,7 +221,7 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 		CMyForm* pMyForm = dynamic_cast<CMyForm*>(pMainFrm->m_SecondSplitter.GetPane(1, 0));
 		CMapTool* pMapTool = &(pMyForm->m_MapTool);
 
-		if (GetAsyncKeyState(VK_LBUTTON))
+		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 		{
 			if (g_TileEdit)
 				m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) / g_Ratio,
@@ -229,7 +229,7 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 
 		}
 
-		if (g_ObjEdit)
+		else if (g_ObjEdit)
 		{
 			m_pObj->SetPreview(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
 				((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
