@@ -10,8 +10,8 @@
 #define		TILECX			62
 #define		TILECY			30
 
-#define		TILEX			20
-#define		TILEY			30
+#define		TILEX			40
+#define		TILEY			60
 
 #define		MIN_STR			64
 #define		MAX_STR			256

@@ -8,6 +8,7 @@
 #include "TextureMgr.h"
 
 #include "Terrain.h"
+#include "Obj.h"
 #include "Line.h"
 
 class CToolDoc;
@@ -54,11 +55,16 @@ public:
 	CClientDC*		GetToolViewDC() { return m_dc; }
 public:
 	CTerrain*		m_pTerrain;
+	CObj*			m_pObj;
+	CClientDC*		m_dc;
+
 	CLine*			m_pLine;
 	CClientDC*		m_dc;
 	//CPoint			m_p;
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+
+	CClientDC*			GetToolViewDC() { return m_dc; }
 };
 
 #ifndef _DEBUG  // ToolView.cpp의 디버그 버전

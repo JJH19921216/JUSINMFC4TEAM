@@ -4,6 +4,7 @@
 #include "UnitTool.h"
 #include "MapTool.h"
 #include "PathFind.h"
+#include "ColliderTool.h"
 
 // CMyForm Æû ºäÀÔ´Ï´Ù.
 
@@ -41,6 +42,7 @@ public:
 	CUnitTool	m_UnitTool;
 	CMapTool	m_MapTool;
 	CPathFind	m_PathFind;
+	CColliderTool m_CollideTool;
 
 	afx_msg void OnMapTool();
 	afx_msg void OnPathFind();

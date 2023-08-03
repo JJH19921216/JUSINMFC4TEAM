@@ -7,7 +7,7 @@
 #include "Device.h"
 #include "MainFrm.h"
 #include "ToolView.h"
-
+#include "Obj.h"
 // CMiniView
 
 IMPLEMENT_DYNCREATE(CMiniView, CView)
@@ -45,12 +45,12 @@ void CMiniView::OnDraw(CDC* pDC)
 	//CMainFrame*		pMainFrm = dynamic_cast<CMainFrame*>(GetParentFrame());
 
 	CTerrain*		pTerrain = pMainView->m_pTerrain;
-
+	CObj* pObj = pMainView->m_pObj;
 
 	CDevice::Get_Instance()->Render_Begin();
 
 	pTerrain->Mini_Render();
-
+	pObj->Mini_Render();
 	CDevice::Get_Instance()->Render_End(m_hWnd);
 }
 

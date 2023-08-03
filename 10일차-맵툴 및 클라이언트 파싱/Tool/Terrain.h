@@ -31,11 +31,7 @@ public:
 private:
 	vector<TILE*>		m_vecTile;
 	CToolView*			m_pMainView = nullptr;
-	float				m_Ratio;
 
-public:
-	float				GetRatio() { return m_Ratio; }
-	void				UpRatio() { m_Ratio += 0.1f; }
-	void				DownRatio() { if(m_Ratio > 0.1f) m_Ratio -= 0.1f; }
+
 };
 

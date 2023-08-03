@@ -61,11 +61,20 @@
     <Filter Include="06. FormView\DIalog\01. MapTool">
       <UniqueIdentifier>{c2a91f25-ddff-4c60-b887-08f2edfc7211}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05. Etc\01. FileInfo">
-      <UniqueIdentifier>{09843c86-a5ea-4ab2-a8fc-62bc2ad663b6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="06. FormView\DIalog\02.PathFind">
       <UniqueIdentifier>{b07ab9b5-fde0-41ac-926a-889043f31d58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Etc\02. FileInfo">
+      <UniqueIdentifier>{09843c86-a5ea-4ab2-a8fc-62bc2ad663b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Etc\01.Object">
+      <UniqueIdentifier>{643cab54-7407-415e-afd3-57d68f4d96be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. FormView\DIalog\03.ColliderTool">
+      <UniqueIdentifier>{cab2e0d8-8ce3-43a1-a076-d79ae6f41197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06. FormView\ColliderView">
+      <UniqueIdentifier>{873eabc7-7826-44ab-9fed-d109ebc6f95b}</UniqueIdentifier>
     </Filter>
     <Filter Include="05. Etc\02.Line">
       <UniqueIdentifier>{f8fd69e7-7792-4e9b-a5c9-3a4c0ae6b5b8}</UniqueIdentifier>
@@ -127,10 +136,19 @@
       <Filter>06. FormView\DIalog\01. MapTool</Filter>
     </ClInclude>
     <ClInclude Include="FileInfo.h">
-      <Filter>05. Etc\01. FileInfo</Filter>
+      <Filter>05. Etc\02. FileInfo</Filter>
     </ClInclude>
     <ClInclude Include="PathFind.h">
       <Filter>06. FormView\DIalog\02.PathFind</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj.h">
+      <Filter>05. Etc\01.Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderTool.h">
+      <Filter>06. FormView\DIalog\03.ColliderTool</Filter>
+    </ClInclude>
+    <ClInclude Include="CollideView.h">
+      <Filter>06. FormView\ColliderView</Filter>
     </ClInclude>
     <ClInclude Include="Line.h">
       <Filter>05. Etc\02.Line</Filter>
@@ -183,10 +201,19 @@
       <Filter>06. FormView\DIalog\01. MapTool</Filter>
     </ClCompile>
     <ClCompile Include="FileInfo.cpp">
-      <Filter>05. Etc\01. FileInfo</Filter>
+      <Filter>05. Etc\02. FileInfo</Filter>
     </ClCompile>
     <ClCompile Include="PathFind.cpp">
       <Filter>06. FormView\DIalog\02.PathFind</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj.cpp">
+      <Filter>05. Etc\01.Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderTool.cpp">
+      <Filter>06. FormView\DIalog\03.ColliderTool</Filter>
+    </ClCompile>
+    <ClCompile Include="CollideView.cpp">
+      <Filter>06. FormView\ColliderView</Filter>
     </ClCompile>
     <ClCompile Include="Line.cpp">
       <Filter>05. Etc\02.Line</Filter>
