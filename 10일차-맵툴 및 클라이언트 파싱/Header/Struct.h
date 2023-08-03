@@ -92,13 +92,19 @@ typedef	struct tagLinePoint
 }LINEPOINT;
 
 
+// typedef struct tagLine
+// {
+// 	tagLine() { ZeroMemory(this, sizeof(tagLine)); }
+// 	tagLine(LINEPOINT& _tLpoint, LINEPOINT& _tRpoint)
+// 		: tLpoint(_tLpoint), tRpoint(_tRpoint) { }
+// 
+// 	LINEPOINT	tLpoint;
+// 	LINEPOINT	tRpoint;
+// 
+// }LINE;
+
 typedef struct tagLine
 {
-	tagLine() { ZeroMemory(this, sizeof(tagLine)); }
-	tagLine(LINEPOINT& _tLpoint, LINEPOINT& _tRpoint)
-		: tLpoint(_tLpoint), tRpoint(_tRpoint) { }
-
-	LINEPOINT	tLpoint;
-	LINEPOINT	tRpoint;
-
+	D3DXVECTOR2 tLpoint;
+	D3DXVECTOR2 tRpoint;
 }LINE;

@@ -6,6 +6,7 @@
 #include "UnitTool.h"
 #include "afxdialogex.h"
 #include "FileInfo.h"
+#include "ToolView.h"
 
 
 // CUnitTool 대화 상자입니다.
@@ -78,6 +79,7 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
 	ON_LBN_SELCHANGE(IDC_LIST2, &CUnitTool::OnCharcterListBox)
 	ON_WM_DROPFILES()
 	ON_BN_CLICKED(IDC_BUTTON13, &CUnitTool::OnMonsterButton)
+ 
 END_MESSAGE_MAP()
 
 
@@ -429,12 +431,12 @@ void CUnitTool::OnLoadData()
 void CUnitTool::OnDeleteLine()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	
-
+	UpdateData(TRUE);
 	g_LineEdit = false;
 
-	
-
+	if(m_vecLineData.size() > 0)
+		m_vecLineData.pop_back();
+	UpdateData(FALSE);
 }
 
 
@@ -650,3 +652,4 @@ void CUnitTool::OnMonsterButton()
 	g_LineEdit = FALSE;
 	g_MonsterEdit = TRUE;
 }
+

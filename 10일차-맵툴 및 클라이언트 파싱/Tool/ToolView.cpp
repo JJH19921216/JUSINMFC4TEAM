@@ -23,6 +23,7 @@ bool	g_TileEdit = false;
 bool	g_ObjEdit = false;
 bool	g_LineEdit = false;
 bool	g_MonsterEdit = false;
+vector<LINE>  m_vecLineData;
 // CToolView
 
 IMPLEMENT_DYNCREATE(CToolView, CScrollView)
@@ -36,6 +37,8 @@ BEGIN_MESSAGE_MAP(CToolView, CScrollView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
 	ON_WM_KEYDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CToolView 생성/소멸
@@ -158,7 +161,10 @@ void CToolView::OnInitialUpdate()
 	m_pMonster->Set_MainView(this);
 
 	m_pLine = new CLine;
+	m_pLine->SetMainView(this);
 	m_dc = new CClientDC(this);
+
+	SetTimer(0, 1, 0);
 }
 
 void CToolView::OnDraw(CDC* pDC)
@@ -168,19 +174,26 @@ void CToolView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 	
-	CDevice::Get_Instance()->Render_Begin();
+	CDevice::Get_Instance()->Get_Device()->Clear(0,
+		NULL,
+		D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER | D3DCLEAR_TARGET,
+		D3DCOLOR_ARGB(255, 0, 0, 255),	// 백버퍼 색상
+		1.f,		// z버퍼의 초기화 값
+		0);			// 스텐실 버퍼의 초기화 값
 
+	CDevice::Get_Instance()->Render_Begin();
 	m_pTerrain->Render();
 	m_pObj->Render();
 	m_pMonster->Render();
-	//m_pLine->Render(pDC);
-
 	if (g_MonsterEdit)
 		m_pMonster->Preview_Render();
-
 	if (g_ObjEdit)
 		m_pObj->Preview_Render();
+
+	m_pLine->Render(m_vecLineData);
 	CDevice::Get_Instance()->Render_End();
+
+	CDevice::Get_Instance()->Get_Device()->Present(NULL, NULL, NULL, NULL);
 }
 
 void CToolView::OnDestroy()
@@ -229,9 +242,10 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	if (!g_LineEdit)
 	{
-		
+	
 		m_dc->MoveTo(point.x, point.y);
 		m_pLine->SetStartPoint(point);
+		
 		m_pLine->SetEndPoint(point);
 		// 		m_pLine->SetStartPoint(CPoint(((float)point.x + GetScrollPos(0)) / fRatio, ((float)point.y + GetScrollPos(1)) / fRatio));
 		// 		m_pLine->SetEndPoint(CPoint(((float)point.x + GetScrollPos(0)) / fRatio, ((float)point.y + GetScrollPos(1)) / fRatio));
@@ -239,7 +253,8 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	else if (g_LineEdit)
 	{
-		m_pLine->SetStartPoint(point);
+		cacheLine.tLpoint.x = point.x + GetScrollPos(0);
+		cacheLine.tLpoint.y = point.y + GetScrollPos(1);
 	}
 	m_dc->SelectObject(oldPen);
 	
@@ -251,7 +266,7 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	CScrollView::OnMouseMove(nFlags, point);
 	
-	if (g_TileEdit || g_ObjEdit ||g_LineEdit||g_MonsterEdit)
+	if (g_TileEdit || g_ObjEdit || g_LineEdit || g_MonsterEdit)
 	{
 		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 		CMyForm* pMyForm = dynamic_cast<CMyForm*>(pMainFrm->m_SecondSplitter.GetPane(1, 0));
@@ -273,22 +288,28 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 				m_pObj->SetPreview(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
 					((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 			}
-
-			CPen pen;
-			pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));    // 빨간색 펜 생성
-			CPen* oldPen = m_dc->SelectObject(&pen);
 			
-			if (g_LineEdit)
-			{
-				m_dc->SetROP2(R2_XORPEN);
-				m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
-				m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
-				m_pLine->SetEndPoint(point);
-				m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
-				m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
-				Invalidate(FALSE);
-			}
-			m_dc->SelectObject(oldPen);
+			//CPen pen;
+			//pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));    // 빨간색 펜 생성
+			//CPen* oldPen = m_dc->SelectObject(&pen);
+			//
+			//if (g_LineEdit)
+			//{
+			//	//m_dc->SetROP2(R2_XORPEN);
+			//	//m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
+			//	//m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
+			//	
+			//	point.x += GetScrollPos(0) / g_Ratio;
+			//	point.y += GetScrollPos(1) / g_Ratio;
+			//	m_pLine->SetEndPoint(point);
+			//	//m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
+			//	//m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
+			//	//Invalidate(FALSE);
+			//}
+			//m_dc->SelectObject(oldPen);
+
+
+			mouseEndPoint = point;
 
 			CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
 			Invalidate(FALSE);
@@ -317,5 +338,41 @@ void CToolView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			g_Ratio -= 0.1f;
 		break;
 	}
+	Invalidate(FALSE);
+}
+
+
+void CToolView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	if(g_LineEdit)
+	{
+		cacheLine.tRpoint.x = point.x + GetScrollPos(0);
+		cacheLine.tRpoint.y = point.y + GetScrollPos(1);
+		m_vecLineData.push_back(cacheLine);
+	}
+	CScrollView::OnLButtonUp(nFlags, point);
+
+	Invalidate(FALSE);
+}
+
+
+void CToolView::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CScrollView::OnTimer(nIDEvent);
+
+	CDevice::Get_Instance()->Render_Begin();
+	m_pTerrain->Render();
+	m_pObj->Render();
+	m_pMonster->Render();
+	if (g_MonsterEdit)
+		m_pMonster->Preview_Render();
+	if (g_ObjEdit)
+		m_pObj->Preview_Render();
+
+	m_pLine->Render(m_vecLineData);
+	CDevice::Get_Instance()->Render_End();
 	Invalidate(FALSE);
 }

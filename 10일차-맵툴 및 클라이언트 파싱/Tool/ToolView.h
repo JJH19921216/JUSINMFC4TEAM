@@ -60,10 +60,17 @@ public:
 	CObj*			m_pObj;
 	CMonster*		m_pMonster;
 	CClientDC*		m_dc;
+	vector<CLine*>  m_vecLine;
+	CPoint mouseEndPoint;
+
+	LINE cacheLine;
+	//vector<LINE>& Get_VecLineData() { return m_vecLineData; }
 
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 #ifndef _DEBUG  // ToolView.cpp의 디버그 버전

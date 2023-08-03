@@ -173,8 +173,8 @@ void CCollideView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	if (m_bDrawStart)
 	{
 		m_bDrawStart = false;		
-		EndPoint.x = point.x + GetScrollPos(0);;
-		EndPoint.y = point.y + GetScrollPos(1);;
+		EndPoint.x = point.x + GetScrollPos(0);
+		EndPoint.y = point.y + GetScrollPos(1);
 		m_CollideList[m_pObj->m_PreviewObj.byDrawID].push_back({ (float)EndPoint.x,(float)EndPoint.y,0.f });
 
 		Invalidate();
