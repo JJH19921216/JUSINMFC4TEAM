@@ -286,22 +286,18 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 					(float)point.y + GetScrollPos(1) / g_Ratio, 0.f), pUnitTool->m_iDrawID);
 
 			
-			
-			
-
-
 			mouseEndPoint = point;
-
-			CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
-			Invalidate(FALSE);
-
-			pMiniView->Invalidate(FALSE);
+			
 		}
 		if (g_ObjEdit)
 		{
 			m_pObj->SetPreview(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
 				((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 		}
+		CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
+		Invalidate(FALSE);
+
+		pMiniView->Invalidate(FALSE);
 
 	}
 }
