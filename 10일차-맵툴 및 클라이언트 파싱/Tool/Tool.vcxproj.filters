@@ -79,6 +79,12 @@
     <Filter Include="05. Etc\03.Collider">
       <UniqueIdentifier>{4e90e5b4-ffef-4e1a-90f7-a29baa607b35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Etc\03.Line">
+      <UniqueIdentifier>{f8fd69e7-7792-4e9b-a5c9-3a4c0ae6b5b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Etc\04. Monster">
+      <UniqueIdentifier>{979a0470-98db-41df-be7b-0d1f17bae381}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -153,6 +159,12 @@
     <ClInclude Include="Collider.h">
       <Filter>05. Etc\03.Collider</Filter>
     </ClInclude>
+    <ClInclude Include="Line.h">
+      <Filter>05. Etc\03.Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>05. Etc\04. Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -217,6 +229,12 @@
     </ClCompile>
     <ClCompile Include="Collider.cpp">
       <Filter>05. Etc\03.Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Line.cpp">
+      <Filter>05. Etc\03.Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>05. Etc\04. Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -21,6 +21,7 @@
 HWND	g_hWnd;
 bool	g_TileEdit = false;
 bool	g_ObjEdit = false;
+bool	g_LineEdit = false;
 // CToolView
 
 IMPLEMENT_DYNCREATE(CToolView, CScrollView)
@@ -155,10 +156,12 @@ void CToolView::OnInitialUpdate()
 	m_pCollider->Initialize();
 	m_pCollider->Set_MainView(this);
 
+
+	m_pLine = new CLine;
 	m_dc = new CClientDC(this);
 }
 
-void CToolView::OnDraw(CDC* /*pDC*/)
+void CToolView::OnDraw(CDC* pDC)
 {
 	CToolDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -169,6 +172,7 @@ void CToolView::OnDraw(CDC* /*pDC*/)
 
 	m_pTerrain->Render();
 	m_pObj->Render();
+	//m_pLine->Render(pDC);
 
 	if (g_ObjEdit)
 		m_pObj->Preview_Render();
@@ -184,6 +188,8 @@ void CToolView::OnDestroy()
 
 	Safe_Delete(m_pTerrain);
 	Safe_Delete(m_pObj);
+
+	Safe_Delete(m_pLine);
 
 	CTextureMgr::Destroy_Instance();
 	CDevice::Get_Instance()->Destroy_Instance();
@@ -201,7 +207,7 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	CMapTool*		pMapTool = &(pMyForm->m_MapTool);
 	
 	if (g_TileEdit)
-		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* g_Ratio, 
+		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* g_Ratio,
 											(float)point.y + GetScrollPos(1)* g_Ratio, 0.f), pMapTool->m_iDrawID);
 
 	else if (g_ObjEdit)
@@ -216,10 +222,29 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	// FALSE : WM_PAINT 메세지만 발생
 	// TRUE : WM_PAINT, WM_ERASEBKGND 메세지를 둘 다 발생
 
-	Invalidate(FALSE);	
-	CMiniView*		pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
-	pMiniView->Invalidate(FALSE);
+	Invalidate(FALSE);
+	CPen pen;
+	pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));    // 빨간색 펜 생성
+	CPen* oldPen = m_dc->SelectObject(&pen);
 
+	if (!g_LineEdit)
+	{
+		
+		m_dc->MoveTo(point.x, point.y);
+		m_pLine->SetStartPoint(point);
+		m_pLine->SetEndPoint(point);
+		// 		m_pLine->SetStartPoint(CPoint(((float)point.x + GetScrollPos(0)) / fRatio, ((float)point.y + GetScrollPos(1)) / fRatio));
+		// 		m_pLine->SetEndPoint(CPoint(((float)point.x + GetScrollPos(0)) / fRatio, ((float)point.y + GetScrollPos(1)) / fRatio));
+		Invalidate(FALSE);
+	}
+	else if (g_LineEdit)
+	{
+		m_pLine->SetStartPoint(point);
+	}
+	m_dc->SelectObject(oldPen);
+	
+	
+	
 }
 
 void CToolView::OnMouseMove(UINT nFlags, CPoint point)
@@ -238,13 +263,34 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 				m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) / g_Ratio,
 					(float)point.y + GetScrollPos(1) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 
-		}
+			
 
+			CPen pen;
+			pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));    // 빨간색 펜 생성
+			CPen* oldPen = m_dc->SelectObject(&pen);
+			
+			if (g_LineEdit)
+			{
+				m_dc->SetROP2(R2_XORPEN);
+				m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
+				m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
+				m_pLine->SetEndPoint(point);
+				m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
+				m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
+				Invalidate(FALSE);
+			}
+			m_dc->SelectObject(oldPen);
+		
+		}
 		else if (g_ObjEdit)
 		{
 			m_pObj->SetPreview(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
 				((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 		}
+		
+			
+
+			
 
 		CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
 		

@@ -194,9 +194,11 @@
     <ClInclude Include="CollideView.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="FileInfo.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MapTool.h" />
     <ClInclude Include="MiniView.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="MultiTexture.h" />
     <ClInclude Include="MyForm.h" />
     <ClInclude Include="Obj.h" />
@@ -219,9 +221,11 @@
     <ClCompile Include="CollideView.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="FileInfo.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MapTool.cpp" />
     <ClCompile Include="MiniView.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MultiTexture.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="Obj.cpp" />

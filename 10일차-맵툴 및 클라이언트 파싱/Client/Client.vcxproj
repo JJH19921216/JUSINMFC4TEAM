@@ -156,7 +156,6 @@
     <ClInclude Include="MyTerrain.h" />
     <ClInclude Include="Obj.h" />
     <ClInclude Include="ObjMgr.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
@@ -177,7 +176,6 @@
     <ClCompile Include="MyTerrain.cpp" />
     <ClCompile Include="Obj.cpp" />
     <ClCompile Include="ObjMgr.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="ScrollMgr.cpp" />

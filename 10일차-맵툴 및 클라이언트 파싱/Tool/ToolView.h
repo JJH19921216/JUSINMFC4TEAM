@@ -10,6 +10,7 @@
 #include "Terrain.h"
 #include "Obj.h"
 #include "Collider.h"
+#include "Line.h"
 
 class CToolDoc;
 class CToolView : public CScrollView
@@ -51,9 +52,11 @@ public:
 	virtual void OnInitialUpdate();
 	afx_msg void OnDestroy();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-
+public:
+	CClientDC*		GetToolViewDC() { return m_dc; }
 public:
 	CTerrain*		m_pTerrain;
+	CLine*			m_pLine;
 	CObj*			m_pObj;
 	CCollider*		m_pCollider;
 
@@ -62,7 +65,6 @@ public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
-	CClientDC*			GetToolViewDC() { return m_dc; }
 };
 
 #ifndef _DEBUG  // ToolView.cpp의 디버그 버전
