@@ -39,6 +39,7 @@ public:
 	
 	void	   CLPreview_Render();
 	void	   SetCLPreview(const BYTE& byDrawID) {m_PreviewObj.byDrawID = byDrawID; }
+	void	   ColliderRender();
 
 	vector<OBJ*>	m_vecRedolist;
 	vector<OBJ*>	m_vecRender;

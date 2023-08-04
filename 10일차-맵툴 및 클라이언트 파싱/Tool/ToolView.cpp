@@ -151,6 +151,10 @@ void CToolView::OnInitialUpdate()
 	m_pObj->Initialize();
 	m_pObj->Set_MainView(this);
 
+	m_pCollider = new CCollider;
+	m_pCollider->Initialize();
+	m_pCollider->Set_MainView(this);
+
 	m_dc = new CClientDC(this);
 }
 
@@ -168,7 +172,10 @@ void CToolView::OnDraw(CDC* /*pDC*/)
 
 	if (g_ObjEdit)
 		m_pObj->Preview_Render();
+
 	CDevice::Get_Instance()->Render_End();
+
+	m_pObj->ColliderRender();
 }
 
 void CToolView::OnDestroy()
@@ -198,9 +205,13 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 											(float)point.y + GetScrollPos(1)* g_Ratio, 0.f), pMapTool->m_iDrawID);
 
 	else if (g_ObjEdit)
-		m_pObj->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0))/ g_Ratio,
-									   ((float)point.y + GetScrollPos(1))/ g_Ratio, 0.f), pMapTool->m_iDrawID);
-
+	{
+		m_pObj->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
+			((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
+		m_pCollider->Add_Collider(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
+			((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
+	}
+		
 	// Invalidate : 호출 시, 윈도우의 WM_PAINT와 WM_ERASEBKGND 메세지를 발생시킴
 	// FALSE : WM_PAINT 메세지만 발생
 	// TRUE : WM_PAINT, WM_ERASEBKGND 메세지를 둘 다 발생
@@ -236,6 +247,7 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 		}
 
 		CMiniView* pMiniView = dynamic_cast<CMiniView*>(pMainFrm->m_SecondSplitter.GetPane(0, 0));
+		
 		Invalidate(FALSE);
 		pMiniView->Invalidate(FALSE);
 	}

@@ -9,6 +9,7 @@
 
 #include "Terrain.h"
 #include "Obj.h"
+#include "Collider.h"
 
 class CToolDoc;
 class CToolView : public CScrollView
@@ -54,6 +55,8 @@ public:
 public:
 	CTerrain*		m_pTerrain;
 	CObj*			m_pObj;
+	CCollider*		m_pCollider;
+
 	CClientDC*		m_dc;
 
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);

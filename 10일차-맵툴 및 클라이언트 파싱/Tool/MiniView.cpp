@@ -46,7 +46,6 @@ void CMiniView::OnDraw(CDC* pDC)
 
 	CTerrain*		pTerrain = pMainView->m_pTerrain;
 	CObj* pObj = pMainView->m_pObj;
-
 	CDevice::Get_Instance()->Render_Begin();
 
 	pTerrain->Mini_Render();

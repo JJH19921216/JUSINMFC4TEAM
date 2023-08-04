@@ -76,6 +76,9 @@
     <Filter Include="06. FormView\ColliderView">
       <UniqueIdentifier>{873eabc7-7826-44ab-9fed-d109ebc6f95b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Etc\03.Collider">
+      <UniqueIdentifier>{4e90e5b4-ffef-4e1a-90f7-a29baa607b35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -147,6 +150,9 @@
     <ClInclude Include="CollideView.h">
       <Filter>06. FormView\ColliderView</Filter>
     </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>05. Etc\03.Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -208,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="CollideView.cpp">
       <Filter>06. FormView\ColliderView</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>05. Etc\03.Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

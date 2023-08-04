@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "ColliderTool.h"
-
+#include "Collider.h"
 
 // CCollideView 보기
 
@@ -49,9 +49,12 @@ public:/*
 	D3DXVECTOR3	StartPoint;
 	D3DXVECTOR3	EndPoint;
 	map<BYTE, vector<D3DXVECTOR3>> m_CollideList;
+	CCollider* m_pCollider;
+
 
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	void		 ColliderRender();
+	void		 SetColliderInfo();
 };
 
 

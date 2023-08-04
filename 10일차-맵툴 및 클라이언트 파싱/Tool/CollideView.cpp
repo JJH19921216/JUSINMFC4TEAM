@@ -5,8 +5,8 @@
 #include "Tool.h"
 #include "CollideView.h"
 #include "Device.h"
-
-
+#include "MainFrm.h"
+#include "ToolView.h"
 // CCollideView
 
 IMPLEMENT_DYNCREATE(CCollideView, CScrollView)
@@ -23,7 +23,6 @@ CCollideView::~CCollideView()
 
 BEGIN_MESSAGE_MAP(CCollideView, CScrollView)
 	ON_WM_LBUTTONDOWN()
-	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
@@ -47,6 +46,13 @@ void CCollideView::OnInitialUpdate()
 	m_bDrawStart = false;
 	m_bDrawEnd = false;;
 	m_DC = new CClientDC(this);
+
+	// AfxGetApp : 메인 쓰레드를 갖고 있는 현재 메인 app을 반환
+	CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	//GetPane(행, 열) : 해당하는 창의 정보를 얻어오는 함수 
+	CToolView* pMainView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+	
+	m_pCollider = pMainView->m_pCollider;
 }
 
 void CCollideView::OnDraw(CDC* pDC)
@@ -118,24 +124,21 @@ void CCollideView::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		StartPoint.x = point.x + GetScrollPos(0);
 		StartPoint.y = point.y + GetScrollPos(1);
-		//EndPoint.x = point.x + GetScrollPos(0);
-		//EndPoint.y = point.y + GetScrollPos(1);
+		EndPoint.x = point.x + GetScrollPos(0);
+		EndPoint.y = point.y + GetScrollPos(1);
 
 		m_CollideList[m_pObj->m_PreviewObj.byDrawID].push_back({ (float)StartPoint.x,(float)StartPoint.y,0.f });
 		
+		CPen pen;
+		pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
+		CPen* oldPen = m_DC->SelectObject(&pen);
+		
+		m_DC->SelectObject(oldPen);
 	}
 
 	m_DC->SelectObject(oldPen);
 }
 
-
-void CCollideView::OnLButtonUp(UINT nFlags, CPoint point)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
-	CScrollView::OnLButtonUp(nFlags, point);
-	
-}
 
 
 void CCollideView::OnMouseMove(UINT nFlags, CPoint point)
@@ -160,9 +163,18 @@ void CCollideView::OnMouseMove(UINT nFlags, CPoint point)
 
 		if(point.x > 320.f)
 			ScrollToPosition({ GetScrollPosition().x + 2,GetScrollPosition().y});
+		else if(point.x < 80.f)
+			ScrollToPosition({ GetScrollPosition().x - 2,GetScrollPosition().y });
+
+		m_DC->SetROP2(R2_COPYPEN);
+		m_DC->MoveTo(m_CollideList[m_pObj->m_PreviewObj.byDrawID][0].x - GetScrollPos(0), m_CollideList[m_pObj->m_PreviewObj.byDrawID][0].y - GetScrollPos(1));
+		for (int i = 0; i < m_CollideList[m_pObj->m_PreviewObj.byDrawID].size() - 1; ++i)
+		{
+			m_DC->LineTo(m_CollideList[m_pObj->m_PreviewObj.byDrawID][i + 1].x - GetScrollPos(0), m_CollideList[m_pObj->m_PreviewObj.byDrawID][i + 1].y - GetScrollPos(1));
+		}
+
 	}
 	
-
 	m_DC->SelectObject(oldPen);
 }
 
@@ -178,14 +190,21 @@ void CCollideView::OnLButtonDblClk(UINT nFlags, CPoint point)
 		EndPoint.x = point.x + GetScrollPos(0);;
 		EndPoint.y = point.y + GetScrollPos(1);;
 		m_CollideList[m_pObj->m_PreviewObj.byDrawID].push_back({ (float)EndPoint.x,(float)EndPoint.y,0.f });
-
+		
+		SetColliderInfo();
 		Invalidate();
+
+		// AfxGetApp : 메인 쓰레드를 갖고 있는 현재 메인 app을 반환
+		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+		//GetPane(행, 열) : 해당하는 창의 정보를 얻어오는 함수 
+		CToolView* pMainView = dynamic_cast<CToolView*>(pMainFrm->m_MainSplitter.GetPane(0, 1));
+		pMainView->Invalidate();
 	}
 }
 
 void CCollideView::ColliderRender()
 {
-	if (m_CollideList.find(m_pObj->m_PreviewObj.byDrawID) != m_CollideList.end()) {
+	if (m_CollideList.find(m_pObj->m_PreviewObj.byDrawID) != m_CollideList.end() && !m_bDrawStart) {
 		
 		CPen pen;
 		pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
@@ -202,4 +221,25 @@ void CCollideView::ColliderRender()
 		m_DC->SelectObject(oldPen);
 	}
 
+}
+
+void CCollideView::SetColliderInfo()
+{
+	vector <D3DXVECTOR3> Temp = m_CollideList[m_pObj->m_PreviewObj.byDrawID];
+
+	for (auto& iter : Temp)
+	{
+		iter.x -= m_pObj->m_PreviewObj.vPos.x;
+		iter.y -= m_pObj->m_PreviewObj.vPos.y;
+	}
+	
+	if (m_pCollider->m_ColliderInfoList.find(m_pObj->m_PreviewObj.byDrawID) != m_pCollider->m_ColliderInfoList.end()) 
+	{
+		m_pCollider->m_ColliderInfoList[m_pObj->m_PreviewObj.byDrawID].clear();
+		m_pCollider->m_ColliderInfoList[m_pObj->m_PreviewObj.byDrawID] = Temp;
+	}
+	else
+		m_pCollider->m_ColliderInfoList.insert({ m_pObj->m_PreviewObj.byDrawID,Temp });
+
+	m_pCollider->Update_ObjCollider();
 }
