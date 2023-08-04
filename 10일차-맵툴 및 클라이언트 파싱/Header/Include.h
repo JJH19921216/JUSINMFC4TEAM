@@ -5,4 +5,4 @@
 #include "Enum.h"
 #include "Functor.h"
 
-extern vector<LINE>  m_vecLineData;
+extern  vector<LINE>  m_vecLineData;

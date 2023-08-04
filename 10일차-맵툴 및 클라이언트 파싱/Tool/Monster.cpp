@@ -15,7 +15,7 @@ CMonster::~CMonster()
 void CMonster::Initialize()
 {
 	m_PreviewMonster.vPos = { 0.f,0.f,0.f };
-	m_PreviewMonster.byDrawID = 0;
+	m_PreviewMonster.byMDrawID = 0;
 }
 
 void CMonster::Update()
@@ -31,7 +31,7 @@ void CMonster::Render()
 
 	for (auto& iter : m_vecMonster)
 	{
-		const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Stage", L"Monster", iter->byDrawID);
+		const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Stage", L"Monster", iter->byMDrawID);
 
 		D3DXMatrixIdentity(&matWorld);
 		D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
@@ -81,7 +81,7 @@ void CMonster::Mini_Render()
 
 	for (auto& iter : m_vecMonster)
 	{
-		const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Stage", L"Monster", iter->byDrawID);
+		const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Stage", L"Monster", iter->byMDrawID);
 
 		D3DXMatrixIdentity(&matWorld);
 		D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
@@ -127,14 +127,14 @@ void CMonster::Set_Ratio(D3DXMATRIX* pOut, float fRatioX, float fRatioY)
 	pOut->_42 *= fRatioY;
 }
 
-void CMonster::Add_Object(const D3DXVECTOR3& vPos, const BYTE& byDrawID)
+void CMonster::Add_Object(const D3DXVECTOR3& vPos, const BYTE& byMDrawID)
 {
 	Monster* pMonster = new Monster;
 
 	pMonster->vPos = vPos;
 	pMonster->vSize = { (float)TILECX, (float)TILECY, 0.f };
-	pMonster->byOption = 0;
-	pMonster->byDrawID = byDrawID;
+	pMonster->byMOption = 0;
+	pMonster->byMDrawID = byMDrawID;
 
 	m_vecMonster.push_back(pMonster);
 }
@@ -154,7 +154,7 @@ void CMonster::Preview_Render()
 {
 	D3DXMATRIX	matWorld, matScale, matTrans;
 
-	const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Map", L"Object", m_PreviewMonster.byDrawID);
+	const TEXINFO* pTexInfo = CTextureMgr::Get_Instance()->Get_Texture(L"Map", L"Object", m_PreviewMonster.byMDrawID);
 
 	D3DXMatrixIdentity(&matWorld);
 	D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);

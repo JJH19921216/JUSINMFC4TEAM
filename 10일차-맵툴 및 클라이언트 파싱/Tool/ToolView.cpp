@@ -159,6 +159,7 @@ void CToolView::OnInitialUpdate()
 	m_pMonster = new CMonster;
 	m_pMonster->Initialize();
 	m_pMonster->Set_MainView(this);
+	m_pMonster->Set_SubView(this);
 
 	m_pLine = new CLine;
 	m_pLine->SetMainView(this);
@@ -174,24 +175,22 @@ void CToolView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 	
-	CDevice::Get_Instance()->Get_Device()->Clear(0,
-		NULL,
-		D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER | D3DCLEAR_TARGET,
-		D3DCOLOR_ARGB(255, 0, 0, 255),	// 백버퍼 색상
-		1.f,		// z버퍼의 초기화 값
-		0);			// 스텐실 버퍼의 초기화 값
+// 	CDevice::Get_Instance()->Get_Device()->Clear(0,
+// 		NULL,
+// 		D3DCLEAR_STENCIL | D3DCLEAR_ZBUFFER | D3DCLEAR_TARGET,
+// 		D3DCOLOR_ARGB(255, 0, 0, 255),	// 백버퍼 색상
+// 		1.f,		// z버퍼의 초기화 값
+// 		0);			// 스텐실 버퍼의 초기화 값
 
 	CDevice::Get_Instance()->Render_Begin();
 	m_pTerrain->Render();
 	m_pObj->Render();
 	m_pMonster->Render();
-	if (g_MonsterEdit)
-		m_pMonster->Preview_Render();
 	if (g_ObjEdit)
 		m_pObj->Preview_Render();
 
-	m_pLine->Render(m_vecLineData);
 	CDevice::Get_Instance()->Render_End();
+	m_pLine->Render(m_vecLineData);
 
 	CDevice::Get_Instance()->Get_Device()->Present(NULL, NULL, NULL, NULL);
 }
@@ -219,7 +218,7 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	CMainFrame*		pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMyForm*		pMyForm = dynamic_cast<CMyForm*>(pMainFrm->m_SecondSplitter.GetPane(1, 0));
 	CMapTool*		pMapTool = &(pMyForm->m_MapTool);
-	
+	CUnitTool*		pUnitTool = &(pMyForm->m_UnitTool);
 	if (g_TileEdit)
 		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* g_Ratio,
 											(float)point.y + GetScrollPos(1)* g_Ratio, 0.f), pMapTool->m_iDrawID);
@@ -228,8 +227,8 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 		m_pObj->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0))/ g_Ratio,
 									   ((float)point.y + GetScrollPos(1))/ g_Ratio, 0.f), pMapTool->m_iDrawID);
 	if (g_MonsterEdit)
-		m_pObj->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
-									   ((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
+		m_pMonster->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
+									   ((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pUnitTool->m_iDrawID);
 
 	// Invalidate : 호출 시, 윈도우의 WM_PAINT와 WM_ERASEBKGND 메세지를 발생시킴
 	// FALSE : WM_PAINT 메세지만 발생
@@ -271,7 +270,8 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 		CMainFrame* pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 		CMyForm* pMyForm = dynamic_cast<CMyForm*>(pMainFrm->m_SecondSplitter.GetPane(1, 0));
 		CMapTool* pMapTool = &(pMyForm->m_MapTool);
-
+		CUnitTool* pUnitTool = &(pMyForm->m_UnitTool);
+		
 		if (GetAsyncKeyState(VK_LBUTTON))
 		{
 			if (g_TileEdit)
@@ -280,33 +280,15 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 
 			if (g_MonsterEdit)
 				m_pMonster->SetPreview(D3DXVECTOR3((float)point.x + GetScrollPos(0) / g_Ratio,
-					(float)point.y + GetScrollPos(1) / g_Ratio, 0.f), pMapTool->m_iDrawID);
+					(float)point.y + GetScrollPos(1) / g_Ratio, 0.f), pUnitTool->m_iDrawID);
 
-			
 			if (g_ObjEdit)
 			{
 				m_pObj->SetPreview(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
 					((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 			}
 			
-			//CPen pen;
-			//pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));    // 빨간색 펜 생성
-			//CPen* oldPen = m_dc->SelectObject(&pen);
-			//
-			//if (g_LineEdit)
-			//{
-			//	//m_dc->SetROP2(R2_XORPEN);
-			//	//m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
-			//	//m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
-			//	
-			//	point.x += GetScrollPos(0) / g_Ratio;
-			//	point.y += GetScrollPos(1) / g_Ratio;
-			//	m_pLine->SetEndPoint(point);
-			//	//m_dc->MoveTo(m_pLine->GetStartPoint().x, m_pLine->GetStartPoint().y);
-			//	//m_dc->LineTo(m_pLine->GetEndPoint().x, m_pLine->GetEndPoint().y);
-			//	//Invalidate(FALSE);
-			//}
-			//m_dc->SelectObject(oldPen);
+			
 
 
 			mouseEndPoint = point;
@@ -357,22 +339,3 @@ void CToolView::OnLButtonUp(UINT nFlags, CPoint point)
 }
 
 
-void CToolView::OnTimer(UINT_PTR nIDEvent)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-
-	CScrollView::OnTimer(nIDEvent);
-
-	CDevice::Get_Instance()->Render_Begin();
-	m_pTerrain->Render();
-	m_pObj->Render();
-	m_pMonster->Render();
-	if (g_MonsterEdit)
-		m_pMonster->Preview_Render();
-	if (g_ObjEdit)
-		m_pObj->Preview_Render();
-
-	m_pLine->Render(m_vecLineData);
-	CDevice::Get_Instance()->Render_End();
-	Invalidate(FALSE);
-}

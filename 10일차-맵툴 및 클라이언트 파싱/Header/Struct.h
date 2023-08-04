@@ -52,10 +52,10 @@ typedef struct tagMonster
 	D3DXVECTOR3	vPos;			// 타일의 중점 좌표
 	D3DXVECTOR3 vSize;			// 오브젝트의 가로, 세로 사이즈
 
-	BYTE		byOption;		// 0, 1번(장애물)
-	BYTE		byDrawID;		// 몇 번 타일 이미지
+	BYTE		byMOption;		// 0, 1번(장애물)
+	BYTE		byMDrawID;		// 몇 번 타일 이미지
 
-	vector<D3DXVECTOR3> vecLineMove;
+	
 }Monster;
 
 typedef	struct tagUnitData
@@ -70,8 +70,11 @@ typedef	struct tagUnitData
 	int		iHp;
 	BYTE	byJobIndex;
 	BYTE	byItem;
-
+	
 }UNITDATA;
+
+
+
 
 typedef struct tagTexturePath
 {

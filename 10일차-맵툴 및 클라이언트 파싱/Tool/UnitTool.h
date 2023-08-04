@@ -49,7 +49,7 @@ public:
 	int		m_iDrawID = 0;
 public:
 	map<CString, UNITDATA*>		m_mapUnitData;
-
+	
 	afx_msg void OnDeleteData();
 	afx_msg void OnSaveData();
 	afx_msg void OnLoadData();
@@ -64,7 +64,7 @@ private:
 public:
 	afx_msg void OnDropFiles(HDROP hDropInfo);
 	afx_msg void OnMonsterButton();
-    afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+
 };
 
 // 저장하기, 불러오기, 삭제하기, 탐색하기(edit control 이용하여 탐색)
