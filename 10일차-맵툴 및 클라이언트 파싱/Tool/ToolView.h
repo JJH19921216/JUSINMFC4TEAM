@@ -11,6 +11,7 @@
 #include "Obj.h"
 #include "Collider.h"
 #include "Line.h"
+#include "Monster.h"
 
 class CToolDoc;
 class CToolView : public CScrollView
@@ -58,12 +59,20 @@ public:
 	CTerrain*		m_pTerrain;
 	CLine*			m_pLine;
 	CObj*			m_pObj;
+	CMonster*		m_pMonster;
 	CCollider*		m_pCollider;
 
 	CClientDC*		m_dc;
+	vector<CLine*>  m_vecLine;
+	CPoint mouseEndPoint;
+
+	LINE cacheLine;
+	//vector<LINE>& Get_VecLineData() { return m_vecLineData; }
 
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 
 };
 

@@ -46,10 +46,12 @@ void CMiniView::OnDraw(CDC* pDC)
 
 	CTerrain*		pTerrain = pMainView->m_pTerrain;
 	CObj* pObj = pMainView->m_pObj;
+	CMonster* pMonster = pMainView->m_pMonster;
 	CDevice::Get_Instance()->Render_Begin();
 
 	pTerrain->Mini_Render();
 	pObj->Mini_Render();
+	pMonster->Mini_Render();
 	CDevice::Get_Instance()->Render_End(m_hWnd);
 }
 

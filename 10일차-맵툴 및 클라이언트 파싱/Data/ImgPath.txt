@@ -38,6 +38,7 @@ Town|Middle|2|..\Texture\Stage\Map\Town\Middle\%d.png
 Town|Small|2|..\Texture\Stage\Map\Town\Small\%d.png
 Town|Whalf|3|..\Texture\Stage\Map\Town\Whalf\%d.png
 Town|WStore|3|..\Texture\Stage\Map\Town\WStore\%d.png
+Stage|Monster|3|..\Texture\Stage\Monster\Monster%d.png
 Player|Attack|6|..\Texture\Stage\Player\Attack\AKIHA_AKI01_00%d.png
 Player|Dash|11|..\Texture\Stage\Player\Dash\AKIHA_AKI13_00%d.png
 Player|Stand|12|..\Texture\Stage\Player\Stand\AKIHA_AKI00_00%d.png
