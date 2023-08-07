@@ -80,6 +80,7 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
 	ON_WM_DROPFILES()
 	ON_BN_CLICKED(IDC_BUTTON13, &CUnitTool::OnMonsterButton)
  
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -784,3 +785,14 @@ void CUnitTool::OnMonsterButton()
 	g_MonsterEdit = TRUE;
 }
 
+
+
+void CUnitTool::OnClose()
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CDialog::OnClose();
+	g_LineEdit = FALSE;
+	g_MonsterEdit = FALSE;
+
+}
