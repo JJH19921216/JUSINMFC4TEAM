@@ -78,7 +78,7 @@ BEGIN_MESSAGE_MAP(CUnitTool, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON11, &CUnitTool::OnLoadLine)
 	ON_LBN_SELCHANGE(IDC_LIST2, &CUnitTool::OnCharcterListBox)
 	ON_WM_DROPFILES()
-	ON_BN_CLICKED(IDC_BUTTON13, &CUnitTool::OnMonsterButton)
+	ON_BN_CLICKED(IDC_BUTTON13, &CUnitTool::OnMonsterButtonreal)
  
 	ON_WM_CLOSE()
 END_MESSAGE_MAP()
@@ -187,14 +187,14 @@ BOOL CUnitTool::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	HBITMAP		bBitmap = (HBITMAP)LoadImage(nullptr, 
+	/*HBITMAP		bBitmap = (HBITMAP)LoadImage(nullptr, 
 												L"../Texture/JusinLogo1.bmp",
 												IMAGE_BITMAP, 
 												100, 
 												50,
 												LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	m_Bitmap.SetBitmap(bBitmap);
-
+*/
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
@@ -777,7 +777,7 @@ void CUnitTool::OnDropFiles(HDROP hDropInfo)
 }
 
 
-void CUnitTool::OnMonsterButton()
+void CUnitTool::OnMonsterButtonreal()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	GetResource(L"../Texture/Stage/Monster/Monster%d.png", 3);

@@ -67,8 +67,8 @@ void CTerrain::Render()
 
 		D3DXMatrixIdentity(&matWorld);
 		D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
-		D3DXMatrixTranslation(&matTrans, iter->vPos.x - m_pMainView->GetScrollPos(0),
-										 iter->vPos.y - m_pMainView->GetScrollPos(1),
+		D3DXMatrixTranslation(&matTrans, iter->vPos.x - m_pMainView->GetScrollPos(0) / g_Ratio,
+										 iter->vPos.y - m_pMainView->GetScrollPos(1) / g_Ratio,
 										 iter->vPos.z);
 
 		matWorld = matScale * matTrans;
@@ -90,7 +90,7 @@ void CTerrain::Render()
 
 		CDevice::Get_Instance()->Get_Sprite()->Draw(pTexInfo->pTexture,	// 텍스처 객체 주소
 			nullptr, // 출력할 이미지 영역에 대한 렉트 구조체 주소, null인경우 이미지의 0, 0기준으로 출력
-			&D3DXVECTOR3(fCenterX, fCenterY, -1.f), // 출력할 이미지의 중심 축에 대한 vector3 구조체 포인터, nullptr인 경우 0, 0이 중심 좌표
+			&D3DXVECTOR3(fCenterX, fCenterY, 0.f), // 출력할 이미지의 중심 축에 대한 vector3 구조체 포인터, nullptr인 경우 0, 0이 중심 좌표
 			nullptr, // 위치 좌표에 따른 vector3 구조체 포인어
 			D3DCOLOR_ARGB(255, 255, 255, 255)); 	// 출력할 원본 이미지와 섞을 색상 값, 출력 시 섞은 색이 반영, 0xffffffff를 넘겨주면 원본 색상 유지
 
@@ -255,10 +255,10 @@ bool CTerrain::Picking_Dot(const D3DXVECTOR3& vPos, const int& iIndex)
 
 	D3DXVECTOR3		vPoint[4]{
 
-	{ g_Ratio * m_vecTile[iIndex]->vPos.x , g_Ratio * m_vecTile[iIndex]->vPos.y + g_Ratio * (TILECY / 2.f), 0.f },
-	{ g_Ratio * m_vecTile[iIndex]->vPos.x + g_Ratio * (TILECX / 2.f), g_Ratio * m_vecTile[iIndex]->vPos.y, 0.f },
-	{ g_Ratio * m_vecTile[iIndex]->vPos.x,  g_Ratio * m_vecTile[iIndex]->vPos.y - g_Ratio * (TILECY / 2.f), 0.f },
-	{ g_Ratio * m_vecTile[iIndex]->vPos.x - g_Ratio * (TILECX / 2.f),g_Ratio * m_vecTile[iIndex]->vPos.y, 0.f }
+	{  m_vecTile[iIndex]->vPos.x , m_vecTile[iIndex]->vPos.y +  (TILECY / 2.f), 0.f },
+	{  m_vecTile[iIndex]->vPos.x + (TILECX / 2.f),  m_vecTile[iIndex]->vPos.y, 0.f },
+	{  m_vecTile[iIndex]->vPos.x,  m_vecTile[iIndex]->vPos.y -  (TILECY / 2.f), 0.f },
+	{  m_vecTile[iIndex]->vPos.x - (TILECX / 2.f), m_vecTile[iIndex]->vPos.y, 0.f }
 
 	};
 	/*D3DXVECTOR3		vPoint[4]{

@@ -217,8 +217,8 @@ void CToolView::OnLButtonDown(UINT nFlags, CPoint point)
 	CMapTool*		pMapTool = &(pMyForm->m_MapTool);
 	CUnitTool*		pUnitTool = &(pMyForm->m_UnitTool);
 	if (g_TileEdit)
-		m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0)* g_Ratio,
-											(float)point.y + GetScrollPos(1)* g_Ratio, 0.f), pMapTool->m_iDrawID);
+		m_pTerrain->Tile_Change(D3DXVECTOR3(((float)point.x + GetScrollPos(0))/g_Ratio,
+											((float)point.y + GetScrollPos(1))/g_Ratio, 0.f), pMapTool->m_iDrawID);
 	else if (g_ObjEdit)
 	{
 		m_pObj->Add_Object(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
@@ -278,8 +278,8 @@ void CToolView::OnMouseMove(UINT nFlags, CPoint point)
 		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 		{
 			if (g_TileEdit)
-				m_pTerrain->Tile_Change(D3DXVECTOR3((float)point.x + GetScrollPos(0) / g_Ratio,
-					(float)point.y + GetScrollPos(1) / g_Ratio, 0.f), pMapTool->m_iDrawID);
+				m_pTerrain->Tile_Change(D3DXVECTOR3(((float)point.x + GetScrollPos(0)) / g_Ratio,
+					((float)point.y + GetScrollPos(1)) / g_Ratio, 0.f), pMapTool->m_iDrawID);
 
 			if (g_MonsterEdit)
 				m_pMonster->SetPreview(D3DXVECTOR3((float)point.x + GetScrollPos(0) / g_Ratio,

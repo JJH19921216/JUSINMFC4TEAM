@@ -63,7 +63,7 @@ private:
 	void	Horizontal_Scroll();
 public:
 	afx_msg void OnDropFiles(HDROP hDropInfo);
-	afx_msg void OnMonsterButton();
+	afx_msg void OnMonsterButtonreal();
 
     afx_msg void OnClose();
 };
